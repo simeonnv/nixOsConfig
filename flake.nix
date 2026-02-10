@@ -1,4 +1,8 @@
 {
+  nixConfig = {
+    extra-experimental-features = [ "pipe-operators" ];
+  };
+  
   inputs.self.submodules = true;
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
