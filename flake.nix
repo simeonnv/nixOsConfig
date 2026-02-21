@@ -1,8 +1,8 @@
 {
   nixConfig = {
-    extra-experimental-features = [ "pipe-operators" ];
+    extra-experimental-features = ["pipe-operators"];
   };
-  
+
   inputs.self.submodules = true;
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -17,13 +17,20 @@
       flake = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     import-tree.url = "github:vic/import-tree";
-    input-branches.url = "github:mightyiam/input-branches";    
+    input-branches.url = "github:mightyiam/input-branches";
   };
 
-  outputs =
-    inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; }
-      (inputs.import-tree ./modules);
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        (inputs.import-tree ./modules)
+        inputs.home-manager.flakeModules.home-manager
+      ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+    };
 }
