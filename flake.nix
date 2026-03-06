@@ -20,6 +20,11 @@
 
     import-tree.url = "github:vic/import-tree";
     input-branches.url = "github:mightyiam/input-branches";
+
+    sysc-greet = {
+      url = "github:Nomadcxx/sysc-greet";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:
@@ -30,7 +35,7 @@
       ];
       systems = [
         "x86_64-linux"
-        "aarch64-darwin"
+        "aarch64-linux"
       ];
     };
 }
