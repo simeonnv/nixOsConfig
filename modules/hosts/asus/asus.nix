@@ -10,6 +10,8 @@
         asus
         sway
         greeter
+        git
+        fastfetch
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -21,35 +23,44 @@
   flake.nixosModules.asus = {pkgs, ...}: {
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.graphics.enable = true;
+    hardware.enableAllFirmware = true;
+
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
+    services.xserver.videoDrivers = ["nvidia"];
+    hardware.nvidia.open = false;
     home-manager.users.simeon = {pkgs, ...}: {
       home.username = "simeon";
       home.homeDirectory = "/home/simeon";
       home.stateVersion = "25.11";
-      imports = with self.homeManager; [
+      imports = with self.homeModules; [
         sway
+        helix
+        firefox
+        fastfetch
       ];
     };
 
     nixpkgs.config.allowUnfree = true;
 
     boot.loader.grub.enable = true;
-    boot.loader.grub.device = "<INSERT FS HERE>";
-    boot.loader.systemd-boot.enable = false;
+    boot.loader.grub.device = "nodev";
+    boot.loader.grub.efiSupport = true;
+    # boot.loader.systemd-boot.enable = false;
     boot.loader.efi.canTouchEfiVariables = true;
+    boot.loader.efi.efiSysMountPoint = "/boot";
 
     networking.hostName = "asus";
     networking.networkmanager.enable = true;
+    # networking.wireless.enable = true;
+
     time.timeZone = "Europe/Sofia";
 
-    environment.systemPackages = with pkgs; [firefox git helix kitty];
+    environment.systemPackages = with pkgs; [kitty];
     users.users.simeon = {
       isNormalUser = true;
       description = "simeon";
       extraGroups = ["networkmanager" "wheel"];
     };
-
-    programs.firefox.enable = true;
   };
 }

@@ -16,7 +16,7 @@
     ];
   };
 
-  flake.homeManager.sway = {lib, ...}: {
+  flake.homeModules.sway = {lib, ...}: {
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
