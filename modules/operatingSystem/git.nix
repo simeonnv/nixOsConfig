@@ -4,7 +4,10 @@
     pkgs,
     ...
   }: {
-    environment.systemPackages = with pkgs; [git];
+    environment.systemPackages = with pkgs; [git lazygit];
+    programs.lazygit = {
+      enable = true;
+    };
     programs.git = {
       enable = true;
     };
@@ -16,9 +19,6 @@
     ...
   }: {
     programs = {
-      lazygit = {
-        enable = true;
-      };
       git = {
         enable = true;
       };

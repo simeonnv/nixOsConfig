@@ -13,7 +13,6 @@
         rust-analyzer
       ];
       settings = {
-        theme = "ferra";
         editor = {
           lsp.display-messages = true;
         };

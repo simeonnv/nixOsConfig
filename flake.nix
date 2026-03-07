@@ -29,6 +29,11 @@
     disko.url = "github:nix-community/disko";
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
+
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:

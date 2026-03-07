@@ -12,10 +12,13 @@
         greeter
         git
         fastfetch
+        equibop
+        stylix
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
+        inputs.stylix.nixosModules.stylix
         ./_disko.nix
         (
           {pkgs, ...}: {
@@ -48,6 +51,8 @@
         firefox
         fastfetch
         git
+        yazi
+        kitty
       ];
     };
 
@@ -66,7 +71,6 @@
 
     time.timeZone = "Europe/Sofia";
 
-    environment.systemPackages = with pkgs; [kitty];
     users.users.simeon = {
       isNormalUser = true;
       description = "simeon";
