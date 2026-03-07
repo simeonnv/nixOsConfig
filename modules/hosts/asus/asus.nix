@@ -17,6 +17,13 @@
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
         ./_disko.nix
+        (
+          {pkgs, ...}: {
+            nixpkgs.overlays = [
+              inputs.nix-cachyos-kernel.overlays.default
+            ];
+          }
+        )
       ];
   };
 
@@ -24,6 +31,8 @@
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.graphics.enable = true;
     hardware.enableAllFirmware = true;
+
+    boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
