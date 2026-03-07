@@ -4,12 +4,27 @@
     pkgs,
     ...
   }: {
-    environment.systemPackages = [pkgs.git-credential-manager pkgs.git];
+    environment.systemPackages = with pkgs; [git];
     programs.git = {
       enable = true;
-      config = {
-        credential.helper = "${pkgs.git-credential-manager}/bin/git-credential-manager";
-        credential.credentialStore = "secretservice";
+    };
+  };
+
+  flake.homeModules.git = {
+    lib,
+    pkgs,
+    ...
+  }: {
+    programs = {
+      lazygit = {
+        enable = true;
+      };
+      git = {
+        enable = true;
+      };
+      gh = {
+        enable = true;
+        gitCredentialHelper.enable = true;
       };
     };
   };

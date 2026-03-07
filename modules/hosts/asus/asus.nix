@@ -38,6 +38,7 @@
         helix
         firefox
         fastfetch
+        git
       ];
     };
 
