@@ -8,9 +8,8 @@
     modules = with self.nixosModules;
       [
         asus
-        greetd
         sway
-        sysc-greet
+        greeter
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -19,8 +18,7 @@
 
   flake.nixosModules.asus = {pkgs, ...}: {
     nix.settings.experimental-features = ["nix-command" "flakes"];
-    virtualisation.vmware.guest.enable = true;
-    services.xserver.videoDrivers = ["vmware"];
+    hardware.graphics.enable = true;
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
     home-manager.users.simeon = {pkgs, ...}: {
