@@ -18,11 +18,15 @@
   };
 
   flake.nixosModules.asus = {pkgs, ...}: {
+    nix.settings.experimental-features = ["nix-command" "flakes"];
+    virtualisation.vmware.guest.enable = true;
+    services.xserver.videoDrivers = ["vmware"];
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
     home-manager.users.simeon = {pkgs, ...}: {
       home.username = "simeon";
       home.homeDirectory = "/home/simeon";
+      home.stateVersion = "25.11";
       imports = with self.homeManager; [
         sway
       ];
@@ -31,8 +35,7 @@
     nixpkgs.config.allowUnfree = true;
 
     boot.loader.grub.enable = true;
-    boot.loader.grub.device = "nodev";
-    boot.loader.grub.efiSupport = true;
+    boot.loader.grub.device = "<INSERT FS HERE>";
     boot.loader.systemd-boot.enable = false;
     boot.loader.efi.canTouchEfiVariables = true;
 
