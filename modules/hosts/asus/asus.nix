@@ -17,6 +17,7 @@
         thunar
         zsh
         file-roller
+        cinnamon
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

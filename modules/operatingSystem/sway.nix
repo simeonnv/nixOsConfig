@@ -31,6 +31,10 @@
       grim
       slurp
       swappy
+      brightnessctl
+
+      swaylock-effects
+      swayidle
     ];
 
     services.mako = {
@@ -69,6 +73,31 @@
       };
     };
 
+    services.swayidle = {
+      enable = true;
+      events = [
+        {
+          event = "before-sleep";
+          command = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
+        }
+        {
+          event = "lock";
+          command = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
+        }
+      ];
+      timeouts = [
+        {
+          timeout = 300;
+          command = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
+        }
+        {
+          timeout = 600;
+          command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
+          resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
+        }
+      ];
+    };
+
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
@@ -81,11 +110,17 @@
         ];
         keybindings = lib.mkOptionDefault {
           "${modifier}+q" = "kill";
-          "${modifier}+d" = "exec thunar";
+          "${modifier}+e" = "exec thunar";
+          "${modifier}+b" = "exec firefox";
           "Mod1+t" = "exec wofi --show drun";
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
           "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
+
+          "${modifier}+l" = "exec swaylock -f -c 000000";
+
+          "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
+          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
 
           "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
@@ -109,6 +144,17 @@
           "type:keyboard" = {
             xkb_layout = "eu,bg(phonetic)";
             xkb_options = "grp:alt_shift_toggle";
+          };
+        };
+        output = {
+          "eDP-1" = {
+            position = "0 0";
+            mode = "1920x1080@144Hz";
+          };
+
+          "HDMI-A-1" = {
+            position = "1920 0";
+            mode = "1920x1080@74.973Hz";
           };
         };
       };
