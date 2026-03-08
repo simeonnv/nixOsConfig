@@ -13,6 +13,8 @@
     environment.systemPackages = with pkgs; [
       sway
       wl-clipboard
+      adwaita-icon-theme
+      hicolor-icon-theme
     ];
   };
 
@@ -21,12 +23,20 @@
     lib,
     ...
   }: {
-    home.packages = [
-      pkgs.wofi
-      pkgs.i3status
-      pkgs.networkmanagerapplet
-      pkgs.pulseaudio
+    home.packages = with pkgs; [
+      wofi
+      i3status
+      networkmanagerapplet
+      pulseaudio
+      grim
+      slurp
+      swappy
     ];
+
+    services.mako = {
+      enable = true;
+      defaultTimeout = 5000;
+    };
 
     programs.i3status = {
       enable = true;
@@ -71,10 +81,11 @@
         ];
         keybindings = lib.mkOptionDefault {
           "${modifier}+q" = "kill";
-          "${modifier}+d" = "exec wofi --show drun";
+          "${modifier}+d" = "exec thunar";
           "Mod1+t" = "exec wofi --show drun";
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
+          "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
 
           "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";

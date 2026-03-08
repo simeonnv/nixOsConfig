@@ -11,6 +11,19 @@
       image = ./../../assets/lain.jpg;
       polarity = "dark";
 
+      iconTheme = {
+        enable = true;
+        package = pkgs.papirus-icon-theme;
+        dark = "Papirus-Dark";
+        light = "Papirus-Light";
+      };
+
+      cursor = {
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Classic";
+        size = 24;
+      };
+
       fonts = {
         serif = {
           package = pkgs.dejavu_fonts;

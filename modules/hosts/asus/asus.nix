@@ -14,6 +14,9 @@
         fastfetch
         equibop
         stylix
+        thunar
+        zsh
+        file-roller
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -23,7 +26,7 @@
         (
           {pkgs, ...}: {
             nixpkgs.overlays = [
-              inputs.nix-cachyos-kernel.overlays.default
+              inputs.nix-cachyos-kernel.overlays.pinned
             ];
           }
         )
@@ -52,7 +55,9 @@
         fastfetch
         git
         yazi
+        btop
         kitty
+        zsh
       ];
     };
 
