@@ -8,7 +8,7 @@
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
 
-      image = ./../../assets/lain.jpg;
+      image = ./../../assets/blueLain.jpg;
       polarity = "dark";
 
       iconTheme = {

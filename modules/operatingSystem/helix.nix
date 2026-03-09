@@ -14,7 +14,21 @@
       ];
       settings = {
         editor = {
-          lsp.display-messages = true;
+          lsp = {
+            display-messages = true;
+            display-inlay-hints = true;
+            display-progress-messages = true;
+          };
+          auto-save = {
+            focus-lost = true;
+            after-delay.enable = true;
+          };
+          soft-wrap.enable = true;
+          inline-diagnostics = {
+            cursor-line = "hint";
+            other-lines = "error";
+          };
+          completion-replace = true;
         };
       };
       languages = {

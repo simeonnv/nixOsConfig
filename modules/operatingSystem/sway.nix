@@ -33,7 +33,7 @@
       swappy
       brightnessctl
 
-      swaylock-effects
+      swaylock
       swayidle
     ];
 
@@ -73,6 +73,14 @@
       };
     };
 
+    programs.swaylock = {
+      enable = true;
+      settings = {
+        indicator-idle-visible = true;
+        show-failed-attempts = true;
+      };
+    };
+
     services.swayidle = {
       enable = true;
       events = [
@@ -104,6 +112,12 @@
       config = rec {
         modifier = "Mod4";
         terminal = "kitty";
+        gaps = {
+          inner = 5;
+          outer = 5;
+          smartGaps = true;
+          smartBorders = "on";
+        };
         startup = [
           # {command = "firefox";}
           {command = "nm-applet";}
@@ -116,6 +130,8 @@
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
           "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
+
+          "${modifier}+space" = "floating toggle";
 
           "${modifier}+l" = "exec swaylock -f -c 000000";
 
@@ -144,6 +160,8 @@
           "type:keyboard" = {
             xkb_layout = "eu,bg(phonetic)";
             xkb_options = "grp:alt_shift_toggle";
+            repeat_delay = "250";
+            repeat_rate = "50";
           };
         };
         output = {

@@ -17,7 +17,8 @@
         thunar
         zsh
         file-roller
-        cinnamon
+        steam
+        qimgv
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -39,6 +40,7 @@
     hardware.graphics.enable = true;
     hardware.enableAllFirmware = true;
 
+    boot.kernelParams = ["nvidia-drm.modeset=1"];
     boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
     system.stateVersion = "25.11";
@@ -59,6 +61,8 @@
         btop
         kitty
         zsh
+        zellij
+        direnv
       ];
     };
 
