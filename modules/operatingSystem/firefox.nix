@@ -1,13 +1,9 @@
-{pkgs, ...}: {
-  flake.homeModules.firefox = {
-    lib,
-    pkgs,
-    ...
-  }: {
+{ownerProfile, ...}: {
+  flake.homeModules.firefox = {...}: {
     programs.firefox = {
       enable = true;
-      profiles.simeon = {
-        name = "simeon";
+      profiles.${ownerProfile.name} = {
+        name = ownerProfile.name;
         isDefault = true;
       };
     };

@@ -35,6 +35,8 @@
 
       swaylock
       swayidle
+
+      jq
     ];
 
     services.mako = {
@@ -134,6 +136,8 @@
           "${modifier}+space" = "floating toggle";
 
           "${modifier}+l" = "exec swaylock -f -c 000000";
+
+          "${modifier}+Shift+q" = "exec swaymsg -t get_tree | ${pkgs.jq}/bin/jq '.. | select(.focused? == true) | select(.pid != null) | .pid' | xargs kill -9";
 
           "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
           "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";

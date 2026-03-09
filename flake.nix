@@ -36,7 +36,12 @@
     };
   };
 
-  outputs = inputs:
+  outputs = inputs: let
+    ownerProfile = {
+      name = "simeon";
+      email = "simmeon.nv@proton.me";
+    };
+  in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         (inputs.import-tree ./modules)
@@ -46,5 +51,9 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
+
+      _module.args = {
+        ownerProfile = ownerProfile;
+      };
     };
 }
