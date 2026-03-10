@@ -28,6 +28,7 @@
         netcoredbg
         taplo
         yazi
+        ty
       ];
       settings = {
         editor = {

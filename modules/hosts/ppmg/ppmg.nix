@@ -18,6 +18,7 @@
       ++ [
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
+        "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
         ./_disko.nix
       ];
   };

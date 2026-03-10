@@ -22,6 +22,8 @@
         qimgv
         docker
         nvidia
+        nh
+        nmap
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
