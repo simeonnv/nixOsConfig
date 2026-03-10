@@ -31,6 +31,7 @@
         ll = "ls -al";
         la = "ls -A";
         l = "ls -CF";
+        cl = "clear";
         update = "sudo nixos-rebuild switch --flake .";
         gs = "git status";
         gl = "git log --oneline --graph";

@@ -5,8 +5,6 @@
       settings = {
         default_layout = "compact";
       };
-      # enableBashIntegration = true;
-      # enableZshIntegration = true;
     };
   };
 }

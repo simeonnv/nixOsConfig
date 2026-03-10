@@ -22,6 +22,13 @@
         qimgv
         docker
         nvidia
+        nh
+        nmap
+        qbittorrent
+        manix
+        libreoffice
+        viber
+        inkscape
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

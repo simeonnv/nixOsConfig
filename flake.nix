@@ -34,6 +34,8 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    manix.url = "github:mlvzk/manix";
   };
 
   outputs = inputs: let
