@@ -24,6 +24,7 @@
         nvidia
         nh
         nmap
+        kitty
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

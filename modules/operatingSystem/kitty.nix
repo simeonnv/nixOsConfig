@@ -1,4 +1,11 @@
 {pkgs, ...}: {
+  flake.nixosModules.kitty = {pkgs, ...}: {
+    environment.systemPackages = with pkgs; [
+      kitty.terminfo
+      kitty
+    ];
+  };
+  
   flake.homeModules.kitty = {pkgs, ...}: {
     programs.kitty = {
       enable = true;

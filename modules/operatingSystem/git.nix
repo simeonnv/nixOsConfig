@@ -21,6 +21,8 @@
     programs = {
       git = {
         enable = true;
+        userName = "simeon";
+        userEmail = "simmeon.nv@proton.me";
       };
       gh = {
         enable = true;

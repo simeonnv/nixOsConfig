@@ -14,11 +14,11 @@
         zsh
         docker
         ssh
+        kitty
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
-        "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
         ./_disko.nix
       ];
   };
@@ -49,11 +49,13 @@
 
     nixpkgs.config.allowUnfree = true;
 
-    boot.loader.grub.enable = true;
-    boot.loader.grub.device = "nodev";
-    boot.loader.grub.efiSupport = true;
+    boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
-    boot.loader.efi.efiSysMountPoint = "/boot";
+    # boot.loader.grub.enable = true;
+    # boot.loader.grub.device = "nodev";
+    # boot.loader.grub.efiSupport = true;
+    # boot.loader.efi.canTouchEfiVariables = true;
+    # boot.loader.efi.efiSysMountPoint = "/boot";
 
     networking.hostName = "ppmg";
     networking.networkmanager.enable = true;
