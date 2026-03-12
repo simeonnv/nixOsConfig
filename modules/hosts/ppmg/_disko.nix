@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "<IDK>";
+        device = "/dev/sda";
         content = {
           type = "gpt";
           partitions = {

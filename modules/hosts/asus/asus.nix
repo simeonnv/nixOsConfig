@@ -29,6 +29,7 @@
         libreoffice
         viber
         inkscape
+        kitty
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
