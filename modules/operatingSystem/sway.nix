@@ -28,10 +28,11 @@
       i3status
       networkmanagerapplet
       pulseaudio
-      grim
-      slurp
-      swappy
       brightnessctl
+
+      flameshot
+
+      libappindicator-gtk3
 
       swaylock
       swayidle
@@ -121,7 +122,6 @@
           smartBorders = "on";
         };
         startup = [
-          # {command = "firefox";}
           {command = "nm-applet";}
         ];
         keybindings = lib.mkOptionDefault {
@@ -131,7 +131,8 @@
           "Mod1+t" = "exec wofi --show drun";
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
-          "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
+
+          "${modifier}+Shift+s" = "exec flameshot gui";
 
           "${modifier}+space" = "floating toggle";
 

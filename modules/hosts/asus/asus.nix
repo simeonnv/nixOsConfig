@@ -30,6 +30,8 @@
         viber
         inkscape
         kitty
+        dbeaver
+        bluetooth
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
