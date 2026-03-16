@@ -32,6 +32,7 @@
         kitty
         dbeaver
         bluetooth
+        sops
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

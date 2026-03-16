@@ -15,6 +15,7 @@
         docker
         ssh
         kitty
+        sops
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
