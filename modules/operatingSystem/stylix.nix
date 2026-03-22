@@ -11,6 +11,8 @@
       image = ./../../assets/blueLain.jpg;
       polarity = "dark";
 
+      targets.grub.enable = false;
+
       iconTheme = {
         enable = true;
         package = pkgs.papirus-icon-theme;

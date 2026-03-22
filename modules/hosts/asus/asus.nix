@@ -23,7 +23,7 @@
         docker
         nvidia
         nh
-        nmap
+        hacking
         qbittorrent
         manix
         libreoffice
@@ -33,6 +33,8 @@
         dbeaver
         bluetooth
         sops
+        telegram
+        vlc
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

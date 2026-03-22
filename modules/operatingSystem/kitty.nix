@@ -5,7 +5,7 @@
       kitty
     ];
   };
-  
+
   flake.homeModules.kitty = {pkgs, ...}: {
     programs.kitty = {
       enable = true;

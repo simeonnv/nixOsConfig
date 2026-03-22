@@ -1,7 +1,7 @@
 {pkgs, ...}: {
-  flake.nixosModules.nmap = {pkgs, ...}: {
+  flake.nixosModules.vlc = {pkgs, ...}: {
     environment.systemPackages = [
-      pkgs.nmap
+      pkgs.vlc
     ];
   };
 }
