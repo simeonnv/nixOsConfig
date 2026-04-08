@@ -13,6 +13,7 @@
       hashcat
       hashcat-utils
       sqlmap
+      binaryninja-free
     ];
   };
 }

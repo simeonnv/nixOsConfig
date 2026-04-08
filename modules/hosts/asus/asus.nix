@@ -35,6 +35,10 @@
         sops
         telegram
         vlc
+        rust
+        signal
+        i2pd
+        vscode
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -54,6 +58,7 @@
   flake.nixosModules.asus = {pkgs, ...}: {
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
+    nixpkgs.config.allowUnfree = true;
 
     boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
@@ -80,8 +85,6 @@
       ];
     };
 
-    nixpkgs.config.allowUnfree = true;
-
     boot.loader.grub.enable = true;
     boot.loader.grub.device = "nodev";
     boot.loader.grub.efiSupport = true;
@@ -98,7 +101,11 @@
     users.users.${ownerProfile.name} = {
       isNormalUser = true;
       description = ownerProfile.name;
-      extraGroups = ["networkmanager" "wheel"];
+      extraGroups = ["networkmanager" "wheel" "dialout" "adbusers"];
     };
+
+    services.udev.extraRules = ''
+      ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", MODE="0666", GROUP="dialout"
+    '';
   };
 }
