@@ -16,6 +16,8 @@
         ssh
         kitty
         sops
+        rust
+        screen
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -72,6 +74,20 @@
     networking.networkmanager.enable = true;
 
     time.timeZone = "Europe/Sofia";
+
+    services.cloudflared = {
+      enable = true;
+      tunnels = {
+        "48c6f9f1-2b4f-4d28-87d6-d6e2ce55fcac" = {
+          credentialsFile = "/var/lib/cloudflared/credentials.json";
+          default = "http_status:404";
+          ingress = {
+            "sshppmg.fravs.org" = "ssh://localhost:22";
+            "oxalate.fravs.org" = "http://localhost:21212";
+          };
+        };
+      };
+    };
 
     users.users.${ownerProfile.name} = {
       isNormalUser = true;
