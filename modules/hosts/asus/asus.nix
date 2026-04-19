@@ -39,6 +39,7 @@
         signal
         i2pd
         vscode
+        minecraft
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

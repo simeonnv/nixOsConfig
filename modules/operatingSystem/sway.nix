@@ -30,7 +30,9 @@
       pulseaudio
       brightnessctl
 
-      flameshot
+      grim
+      slurp
+      swappy
 
       libappindicator-gtk3
 
@@ -132,7 +134,7 @@
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
 
-          "${modifier}+Shift+s" = "exec flameshot gui";
+          "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
 
           "${modifier}+space" = "floating toggle";
 
