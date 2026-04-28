@@ -40,6 +40,7 @@
         i2pd
         vscode
         minecraft
+        fonts
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -62,6 +63,7 @@
     nixpkgs.config.allowUnfree = true;
 
     boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+    boot.kernelParams = ["pcie_aspm=off"];
 
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
@@ -93,9 +95,22 @@
     boot.loader.efi.canTouchEfiVariables = true;
     boot.loader.efi.efiSysMountPoint = "/boot";
 
+    programs.nix-ld.enable = true;
     networking.hostName = "asus";
     networking.networkmanager.enable = true;
+    networking.networkmanager.wifi.powersave = false;
+    networking.interfaces."eno1".mtu = 1400;
+    networking.interfaces."wlp3s0".mtu = 1400;
+    boot.extraModprobeConfig = ''
+      options rtw89_pci disable_aspm=y
+      options rtw89_8852be disable_aspm=y
+    '';
     # networking.wireless.enable = true;
+    # networking.networkmanager.enable = false;
+    # networking.connman.enable = true;
+    # environment.systemPackages = [
+    #   pkgs.cmst
+    # ];
 
     time.timeZone = "Europe/Sofia";
 
