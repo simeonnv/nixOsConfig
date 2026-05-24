@@ -8,7 +8,8 @@
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
 
-      image = ./../../assets/blueLain.jpg;
+      # image = ./../../assets/blueLain.jpg;
+      image = ./../../assets/inabakumori.png;
       polarity = "dark";
 
       targets.grub.enable = false;

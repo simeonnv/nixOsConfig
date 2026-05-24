@@ -41,6 +41,9 @@
         vscode
         minecraft
         fonts
+        printer3d
+        winboat
+        blender
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -62,7 +65,7 @@
     hardware.enableAllFirmware = true;
     nixpkgs.config.allowUnfree = true;
 
-    boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+    # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
     boot.kernelParams = ["pcie_aspm=off"];
 
     system.stateVersion = "25.11";
@@ -113,6 +116,21 @@
     # ];
 
     time.timeZone = "Europe/Sofia";
+
+    environment.systemPackages = [
+      pkgs.usbutils
+    ];
+
+    networking.firewall = {
+      allowedTCPPorts = [6567];
+      allowedUDPPorts = [6567];
+    };
+    services.zerotierone = {
+      enable = true;
+      joinNetworks = [
+        "88503383903b9acf"
+      ];
+    };
 
     users.users.${ownerProfile.name} = {
       isNormalUser = true;
