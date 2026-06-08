@@ -12,6 +12,7 @@
       pkgs.appimage-run
       pkgs.gamemode
       pkgs.mangohud
+      pkgs.steamcmd
     ];
 
     programs.steam = {
