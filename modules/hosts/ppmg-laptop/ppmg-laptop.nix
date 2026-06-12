@@ -4,11 +4,11 @@
   ownerProfile,
   ...
 }: {
-  flake.nixosConfigurations.ppmg-server = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.ppmg-laptop = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
-        ppmg
+        ppmg-laptop
         git
         fastfetch
         zsh
@@ -53,7 +53,7 @@
       ];
   };
 
-  flake.nixosModules.ppmg-server = {pkgs, ...}: {
+  flake.nixosModules.ppmg-laptop = {pkgs, ...}: {
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     networking.firewall.enable = true;
