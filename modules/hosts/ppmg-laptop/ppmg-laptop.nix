@@ -10,7 +10,6 @@
       [
         ppmg-laptop
         git
-        fastfetch
         zsh
         docker
         ssh
@@ -66,7 +65,6 @@
       home.stateVersion = "25.11";
       imports = with self.homeModules; [
         helix
-        fastfetch
         git
         yazi
         btop
@@ -89,6 +87,7 @@
 
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
+    powerManagement.enable = true;
 
     networking.hostName = "ppmg";
     networking.networkmanager.enable = true;

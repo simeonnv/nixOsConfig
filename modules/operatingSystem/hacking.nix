@@ -14,6 +14,8 @@
       hashcat-utils
       sqlmap
       binaryninja-free
+      bettercap
+      unixtools.netstat
     ];
   };
 }
