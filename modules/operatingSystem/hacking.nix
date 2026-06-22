@@ -16,6 +16,12 @@
       binaryninja-free
       bettercap
       unixtools.netstat
+
+      aircrack-ng
+      iw
+      ethtool
+      pciutils
+      usbutils
     ];
   };
 }
