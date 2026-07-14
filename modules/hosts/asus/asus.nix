@@ -44,6 +44,9 @@
         printer3d
         winboat
         blender
+        devenv
+        jujutsu
+        ai-slop
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -70,6 +73,7 @@
 
     services.udisks2.enable = true;
 
+    services.flatpak.enable = true;
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
     home-manager.backupFileExtension = "backup";
@@ -115,6 +119,8 @@
 
     environment.systemPackages = [
       pkgs.usbutils
+      pkgs.claude-code
+      pkgs.nodejs
     ];
 
     networking.firewall = {

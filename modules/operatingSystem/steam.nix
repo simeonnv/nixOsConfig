@@ -13,6 +13,7 @@
       pkgs.gamemode
       pkgs.mangohud
       pkgs.steamcmd
+      pkgs.gamescope
     ];
 
     programs.steam = {

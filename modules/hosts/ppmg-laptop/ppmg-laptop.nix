@@ -43,6 +43,8 @@
         signal
         vscode
         fonts
+        jujutsu
+        ai-slop
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

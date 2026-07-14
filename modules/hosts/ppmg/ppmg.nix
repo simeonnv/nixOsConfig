@@ -18,6 +18,8 @@
         sops
         rust
         screen
+        jujutsu
+        ai-slop
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
