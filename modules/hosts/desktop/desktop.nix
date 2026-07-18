@@ -4,11 +4,11 @@
   ownerProfile,
   ...
 }: {
-  flake.nixosConfigurations.asus = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.desktop = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
-        asus
+        desktop
         sway
         greeter
         git
@@ -63,7 +63,7 @@
       ];
   };
 
-  flake.nixosModules.asus = {pkgs, ...}: {
+  flake.nixosModules.desktop = {pkgs, ...}: {
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     nixpkgs.config.allowUnfree = true;
@@ -106,7 +106,7 @@
     boot.loader.efi.efiSysMountPoint = "/boot";
 
     programs.nix-ld.enable = true;
-    networking.hostName = "asus";
+    networking.hostName = "desktop";
     networking.networkmanager.enable = true;
     # networking.wireless.enable = true;
     # networking.networkmanager.enable = false;
@@ -127,12 +127,12 @@
       allowedTCPPorts = [6567 1420 7060];
       allowedUDPPorts = [6567 1420 7060];
     };
-    services.zerotierone = {
-      enable = true;
-      joinNetworks = [
-        "88503383903b9acf"
-      ];
-    };
+    # services.zerotierone = {
+    #   enable = true;
+    #   joinNetworks = [
+    #     "88503383903b9acf"
+    #   ];
+    # };
 
     users.users.${ownerProfile.name} = {
       isNormalUser = true;

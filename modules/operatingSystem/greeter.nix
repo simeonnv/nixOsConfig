@@ -24,7 +24,7 @@
 
     services.sysc-greet = {
       enable = true;
-      compositor = "sway";
+      compositor = lib.mkDefault "sway";
     };
 
     services.greetd.settings = {

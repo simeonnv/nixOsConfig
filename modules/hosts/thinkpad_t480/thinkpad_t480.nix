@@ -4,11 +4,11 @@
   ownerProfile,
   ...
 }: {
-  flake.nixosConfigurations.asus = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.thinkpad_t480 = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
-        asus
+        thinkpad_t480
         sway
         greeter
         git
@@ -21,14 +21,12 @@
         steam
         qimgv
         docker
-        nvidia
         nh
         hacking
         qbittorrent
         manix
         libreoffice
         viber
-        inkscape
         kitty
         dbeaver
         bluetooth
@@ -42,8 +40,6 @@
         minecraft
         fonts
         printer3d
-        winboat
-        blender
         devenv
         jujutsu
         ai-slop
@@ -63,7 +59,7 @@
       ];
   };
 
-  flake.nixosModules.asus = {pkgs, ...}: {
+  flake.nixosModules.thinkpad_t480 = {pkgs, ...}: {
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     nixpkgs.config.allowUnfree = true;
@@ -106,7 +102,7 @@
     boot.loader.efi.efiSysMountPoint = "/boot";
 
     programs.nix-ld.enable = true;
-    networking.hostName = "asus";
+    networking.hostName = "t480";
     networking.networkmanager.enable = true;
     # networking.wireless.enable = true;
     # networking.networkmanager.enable = false;
@@ -119,19 +115,12 @@
 
     environment.systemPackages = [
       pkgs.usbutils
-      pkgs.claude-code
       pkgs.nodejs
     ];
 
     networking.firewall = {
       allowedTCPPorts = [6567 1420 7060];
       allowedUDPPorts = [6567 1420 7060];
-    };
-    services.zerotierone = {
-      enable = true;
-      joinNetworks = [
-        "88503383903b9acf"
-      ];
     };
 
     users.users.${ownerProfile.name} = {

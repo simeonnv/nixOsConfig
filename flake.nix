@@ -37,6 +37,8 @@
     };
 
     manix.url = "github:mlvzk/manix";
+
+    nix-claude-code.url = "github:ryoppippi/nix-claude-code";
   };
 
   outputs = inputs: let
