@@ -43,6 +43,7 @@
         devenv
         jujutsu
         ai-slop
+        tlp
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
