@@ -23,6 +23,7 @@
         enable = true;
         userName = "simeon";
         userEmail = "simmeon.nv@proton.me";
+        extraConfig.pull.rebase = false;
       };
       gh = {
         enable = true;

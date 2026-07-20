@@ -112,6 +112,7 @@
     # ];
 
     time.timeZone = "Europe/Sofia";
+    services.upower.enable = true;
 
     environment.systemPackages = [
       pkgs.usbutils
