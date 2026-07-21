@@ -13,7 +13,6 @@
         greeter
         git
         fastfetch
-        equibop
         stylix
         thunar
         zsh
@@ -84,6 +83,7 @@
       services.udiskie.enable = true;
       imports = with self.homeModules; [
         sway
+        discord
         helix
         firefox
         fastfetch

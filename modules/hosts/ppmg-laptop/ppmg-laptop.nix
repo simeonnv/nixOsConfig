@@ -18,7 +18,6 @@
         greeter
         git
         fastfetch
-        equibop
         stylix
         thunar
         zsh
@@ -72,6 +71,7 @@
         btop
         zsh
         eza
+        discord
         zellij
         direnv
         sway

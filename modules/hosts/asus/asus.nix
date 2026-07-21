@@ -13,7 +13,6 @@
         greeter
         git
         fastfetch
-        equibop
         stylix
         thunar
         zsh
@@ -95,6 +94,7 @@
         eza
         zellij
         direnv
+        discord
       ];
     };
 
