@@ -245,24 +245,6 @@
         "type": "github"
       }
     },
-    "flake-utils_2": {
-      "inputs": {
-        "systems": "systems_2"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "fromYaml": {
       "flake": false,
       "locked": {
@@ -409,6 +391,25 @@
         "type": "github"
       }
     },
+    "nixos-06cb-009a-fingerprint-sensor": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1734692513,
+        "narHash": "sha256-3QEzFFrkXLj/JgZGoLaxq/pPkflSXfBOP10bXL8/Niw=",
+        "owner": "ahbnr",
+        "repo": "nixos-06cb-009a-fingerprint-sensor",
+        "rev": "3678b193efa1e06aab86058aecee18ddaa8878d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahbnr",
+        "ref": "24.11",
+        "repo": "nixos-06cb-009a-fingerprint-sensor",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1773628058,
@@ -521,6 +522,21 @@
     },
     "nixpkgs_5": {
       "locked": {
+        "lastModified": 1734323986,
+        "narHash": "sha256-m/lh6hYMIWDYHCAsn81CDAiXoT3gmxXI9J987W5tZrE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "394571358ce82dff7411395829aa6a3aad45b907",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-24.11",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
         "lastModified": 1777954456,
         "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
         "owner": "nixos",
@@ -570,10 +586,10 @@
         "manix": "manix",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nix-claude-code": "nix-claude-code",
-        "nixpkgs": "nixpkgs_5",
+        "nixos-06cb-009a-fingerprint-sensor": "nixos-06cb-009a-fingerprint-sensor",
+        "nixpkgs": "nixpkgs_6",
         "nixpkgs-stable": "nixpkgs-stable",
-        "stylix": "stylix",
-        "sysc-greet": "sysc-greet"
+        "stylix": "stylix"
       }
     },
     "stylix": {
@@ -609,43 +625,7 @@
         "type": "github"
       }
     },
-    "sysc-greet": {
-      "inputs": {
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1776169306,
-        "narHash": "sha256-JC6flTtCpEFbMmtqLqxHfQIeQbFQvIQKITFdBfqL2CQ=",
-        "owner": "Nomadcxx",
-        "repo": "sysc-greet",
-        "rev": "a8967da34de6940dc9cc4d66be84350429b60632",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Nomadcxx",
-        "repo": "sysc-greet",
-        "type": "github"
-      }
-    },
     "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

@@ -1,37 +1,40 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{...}: {
   flake.nixosModules.greeter = {
     pkgs,
     config,
     lib,
-    options,
     ...
-  }: let
-    syscPackage = inputs.sysc-greet.packages.${pkgs.system}.default;
-  in {
-    imports = [
-      inputs.sysc-greet.nixosModules.default
-    ];
-
-    users.users.greeter.extraGroups = ["video" "render" "input"];
+  }: {
     services.greetd.enable = true;
-    environment.systemPackages = [
-      pkgs.greetd
-    ];
-
-    services.sysc-greet = {
-      enable = true;
-      compositor = lib.mkDefault "sway";
-    };
 
     services.greetd.settings = {
       default_session = {
-        command = lib.mkForce "${syscPackage}/bin/sysc-greet";
+        command = lib.concatStringsSep " " [
+          "${pkgs.tuigreet}/bin/tuigreet"
+          "--time"
+          "--remember"
+          "--remember-user-session"
+          "--asterisks"
+          "--sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions"
+        ];
         user = "greeter";
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/cache/tuigreet 0755 greeter greeter - -"
+    ];
+
+    systemd.services.greetd.serviceConfig = {
+      Type = "idle";
+      StandardInput = "tty";
+      StandardOutput = "tty";
+      StandardError = "journal";
+      TTYReset = true;
+      TTYVHangup = true;
+      TTYVTDisallocate = true;
+    };
+
+    boot.consoleLogLevel = 3;
   };
 }

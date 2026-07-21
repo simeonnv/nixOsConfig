@@ -22,14 +22,13 @@
     import-tree.url = "github:vic/import-tree";
     input-branches.url = "github:mightyiam/input-branches";
 
-    sysc-greet = {
-      url = "github:Nomadcxx/sysc-greet";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     disko.url = "github:nix-community/disko";
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
+
+    # driver stack (open-fprintd + python-validity) for the T480's 06cb:009a
+    # fingerprint sensor; keeps its own nixpkgs pin, only tested against 24.11
+    nixos-06cb-009a-fingerprint-sensor.url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor?ref=24.11";
 
     stylix = {
       url = "github:nix-community/stylix";

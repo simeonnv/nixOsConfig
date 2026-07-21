@@ -61,6 +61,33 @@
   };
 
   flake.nixosModules.thinkpad_t480 = {pkgs, ...}: {
+    imports = [
+      inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules."06cb-009a-fingerprint-sensor"
+    ];
+
+    services."06cb-009a-fingerprint-sensor" = {
+      enable = true;
+      backend = "python-validity";
+    };
+
+    security.pam.services = let
+      fprintArgs = ["timeout=10" "max-tries=1"];
+      passwordFirstFprint = {
+        fprintAuth = true;
+        rules.auth.fprintd = {
+          order = 12000;
+          args = fprintArgs;
+        };
+      };
+    in {
+      sudo = {
+        fprintAuth = true;
+        rules.auth.fprintd.args = fprintArgs;
+      };
+      swaylock = passwordFirstFprint;
+      greetd = passwordFirstFprint;
+    };
+
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     nixpkgs.config.allowUnfree = true;
