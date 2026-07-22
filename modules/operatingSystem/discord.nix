@@ -10,7 +10,7 @@
     nixpkgs.config.permittedInsecurePackages = ["openssl-1.1.1w"];
 
     home.packages = [
-      pkgs.concord-tui
+      inputs.concord.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     # stylix would otherwise inject its own generated theme and enable it over system24

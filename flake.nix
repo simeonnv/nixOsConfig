@@ -40,6 +40,8 @@
     nix-claude-code.url = "github:ryoppippi/nix-claude-code";
 
     nixcord.url = "github:4evy/nixcord";
+
+    concord.url = "github:chojs23/concord";
   };
 
   outputs = inputs: let
