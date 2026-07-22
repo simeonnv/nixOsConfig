@@ -11,7 +11,6 @@
     };
 
     environment.systemPackages = with pkgs; [
-      sway
       wl-clipboard
       adwaita-icon-theme
       hicolor-icon-theme
@@ -114,6 +113,9 @@
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
+      extraOptions = [
+        "--unsupported-gpu"
+      ];
       config = rec {
         modifier = "Mod4";
         terminal = "kitty";

@@ -8,6 +8,7 @@
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
+        pkgs-stable
         desktop
         sway
         greeter
@@ -27,7 +28,6 @@
         manix
         libreoffice
         viber
-        inkscape
         kitty
         dbeaver
         bluetooth

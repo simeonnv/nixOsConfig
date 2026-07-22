@@ -8,6 +8,7 @@
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
+        pkgs-stable
         thinkpad_t480
         sway
         greeter

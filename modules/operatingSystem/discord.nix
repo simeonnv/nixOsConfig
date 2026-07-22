@@ -9,6 +9,10 @@
     nixpkgs.config.allowUnfree = true;
     nixpkgs.config.permittedInsecurePackages = ["openssl-1.1.1w"];
 
+    home.packages = [
+      pkgs.concord-tui
+    ];
+
     # stylix would otherwise inject its own generated theme and enable it over system24
     stylix.targets.nixcord.enable = false;
 
