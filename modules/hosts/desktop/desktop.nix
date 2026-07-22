@@ -46,19 +46,13 @@
         devenv
         jujutsu
         ai-slop
+        cachyos-kernel
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
         inputs.stylix.nixosModules.stylix
         ./_disko.nix
-        (
-          {pkgs, ...}: {
-            nixpkgs.overlays = [
-              inputs.nix-cachyos-kernel.overlays.pinned
-            ];
-          }
-        )
       ];
   };
 
@@ -66,9 +60,6 @@
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     nixpkgs.config.allowUnfree = true;
-
-    boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
-    boot.kernelParams = ["pcie_aspm=off"];
 
     services.udisks2.enable = true;
 

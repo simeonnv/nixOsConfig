@@ -1,0 +1,159 @@
+From 66ad3d9e50a613c7e9919c92cb9620de19998dde Mon Sep 17 00:00:00 2001
+From: CToID <funk443@icloud.com>
+Date: Fri, 19 Jun 2026 14:24:56 +0800
+Subject: [PATCH 1/3] screencast: retry on Pipewire buffer errors.
+
+Currently while screencasting through pipewire, if the consumer hasn't
+consume the Pipewire buffer when xdpw is trying to capture the next
+frame, or we're unable to obtain a Pipewire buffer, the stream will
+stop.
+
+This commit adds logic to retry when these situations happen.
+---
+ src/screencast/pipewire_screencast.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/src/screencast/pipewire_screencast.c b/src/screencast/pipewire_screencast.c
+index eb818593..a5bc7208 100644
+--- a/src/screencast/pipewire_screencast.c
++++ b/src/screencast/pipewire_screencast.c
+@@ -611,6 +611,11 @@ static void pwr_handle_stream_remove_buffer(void *data, struct pw_buffer *buffer
+ 	buffer->user_data = NULL;
+ }
+ 
++static void pwr_process_retry(void *data) {
++	struct xdpw_screencast_instance *cast = data;
++	pw_stream_trigger_process(cast->stream);
++}
++
+ static void pwr_handle_stream_on_process(void *data) {
+ 	struct xdpw_screencast_instance *cast = data;
+ 
+@@ -623,15 +628,25 @@ static void pwr_handle_stream_on_process(void *data) {
+ 
+ 	if (cast->current_frame.pw_buffer) {
+ 		logprint(DEBUG, "pipewire: buffer already exported");
+-		return;
++		goto retry;
+ 	}
+ 
+ 	xdpw_pwr_dequeue_buffer(cast);
+ 	if (!cast->current_frame.pw_buffer) {
+ 		logprint(WARN, "pipewire: unable to export buffer");
+-		return;
++		goto retry;
+ 	}
++
+ 	xdpw_wlr_frame_capture(cast);
++	return;
++
++retry:
++	uint64_t delay_ns = fps_limit_measure_end(&cast->fps_limit, cast->framerate);
++	if (delay_ns > 0) {
++		xdpw_add_timer(cast->ctx->state, delay_ns, pwr_process_retry, cast);
++	} else {
++		pwr_process_retry(cast);
++	}
+ }
+ 
+ 
+
+From ae17a4c636f39b40bf5d74a4679595c3c460fe0d Mon Sep 17 00:00:00 2001
+From: CToID <funk443@icloud.com>
+Date: Fri, 19 Jun 2026 15:22:01 +0800
+Subject: [PATCH 2/3] Fix compilation error caused by variable declaration
+ after a goto label.
+
+---
+ src/screencast/pipewire_screencast.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/screencast/pipewire_screencast.c b/src/screencast/pipewire_screencast.c
+index a5bc7208..342888c2 100644
+--- a/src/screencast/pipewire_screencast.c
++++ b/src/screencast/pipewire_screencast.c
+@@ -641,6 +641,8 @@ static void pwr_handle_stream_on_process(void *data) {
+ 	return;
+ 
+ retry:
++	; // Empty statement because declaration cannot follow a goto label.
++
+ 	uint64_t delay_ns = fps_limit_measure_end(&cast->fps_limit, cast->framerate);
+ 	if (delay_ns > 0) {
+ 		xdpw_add_timer(cast->ctx->state, delay_ns, pwr_process_retry, cast);
+@@ -649,7 +651,6 @@ static void pwr_handle_stream_on_process(void *data) {
+ 	}
+ }
+ 
+-
+ static const struct pw_stream_events pwr_stream_events = {
+ 	PW_VERSION_STREAM_EVENTS,
+ 	.state_changed = pwr_handle_stream_state_changed,
+
+From 74be7063347880f6bf98689e24dd9a6e98032405 Mon Sep 17 00:00:00 2001
+From: CToID <funk443@icloud.com>
+Date: Sat, 20 Jun 2026 09:43:01 +0800
+Subject: [PATCH 3/3] screencast: fix potential busy loop problem.
+
+---
+ src/screencast/pipewire_screencast.c | 25 +++++--------------------
+ 1 file changed, 5 insertions(+), 20 deletions(-)
+
+diff --git a/src/screencast/pipewire_screencast.c b/src/screencast/pipewire_screencast.c
+index 342888c2..1da86083 100644
+--- a/src/screencast/pipewire_screencast.c
++++ b/src/screencast/pipewire_screencast.c
+@@ -611,12 +611,7 @@ static void pwr_handle_stream_remove_buffer(void *data, struct pw_buffer *buffer
+ 	buffer->user_data = NULL;
+ }
+ 
+-static void pwr_process_retry(void *data) {
+-	struct xdpw_screencast_instance *cast = data;
+-	pw_stream_trigger_process(cast->stream);
+-}
+-
+-static void pwr_handle_stream_on_process(void *data) {
++static void pwr_handle_stream_on_trigger_done(void *data) {
+ 	struct xdpw_screencast_instance *cast = data;
+ 
+ 	logprint(TRACE, "pipewire: on process event handle");
+@@ -628,27 +623,17 @@ static void pwr_handle_stream_on_process(void *data) {
+ 
+ 	if (cast->current_frame.pw_buffer) {
+ 		logprint(DEBUG, "pipewire: buffer already exported");
+-		goto retry;
++		return;
+ 	}
+ 
+ 	xdpw_pwr_dequeue_buffer(cast);
+ 	if (!cast->current_frame.pw_buffer) {
+ 		logprint(WARN, "pipewire: unable to export buffer");
+-		goto retry;
++		pw_stream_trigger_process(cast->stream);
++		return;
+ 	}
+ 
+ 	xdpw_wlr_frame_capture(cast);
+-	return;
+-
+-retry:
+-	; // Empty statement because declaration cannot follow a goto label.
+-
+-	uint64_t delay_ns = fps_limit_measure_end(&cast->fps_limit, cast->framerate);
+-	if (delay_ns > 0) {
+-		xdpw_add_timer(cast->ctx->state, delay_ns, pwr_process_retry, cast);
+-	} else {
+-		pwr_process_retry(cast);
+-	}
+ }
+ 
+ static const struct pw_stream_events pwr_stream_events = {
+@@ -657,7 +642,7 @@ static const struct pw_stream_events pwr_stream_events = {
+ 	.param_changed = pwr_handle_stream_param_changed,
+ 	.add_buffer = pwr_handle_stream_add_buffer,
+ 	.remove_buffer = pwr_handle_stream_remove_buffer,
+-	.process = pwr_handle_stream_on_process,
++	.trigger_done = pwr_handle_stream_on_trigger_done,
+ };
+ 
+ void xdpw_pwr_stream_create(struct xdpw_screencast_instance *cast) {

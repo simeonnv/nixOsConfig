@@ -2,11 +2,22 @@
   flake.nixosModules.sway = {pkgs, ...}: {
     security.polkit.enable = true;
 
+    environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+    nixpkgs.overlays = [
+      (final: prev: {
+        xdg-desktop-portal-wlr = prev.xdg-desktop-portal-wlr.overrideAttrs (old: {
+          patches = (old.patches or []) ++ [./xdpw-pr389-screencast-retry.patch];
+        });
+      })
+    ];
+
     xdg.portal.wlr = {
       enable = true;
       settings.screencast = {
         chooser_type = "simple";
         chooser_cmd = "${pkgs.slurp}/bin/slurp -f %o -or";
+        force_mod_linear = 1;
       };
     };
 

@@ -21,6 +21,14 @@
 
       discord.enable = false;
       equibop.enable = true;
+      equibop.package = pkgs.equibop.overrideAttrs (old: {
+        postFixup =
+          (old.postFixup or "")
+          + ''
+            wrapProgram $out/bin/equibop \
+              --add-flags "--disable-gpu-memory-buffer-video-frames"
+          '';
+      });
 
       user = "simeon";
 
