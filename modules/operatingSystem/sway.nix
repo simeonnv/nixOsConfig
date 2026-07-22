@@ -1,6 +1,15 @@
 {pkgs, ...}: {
   flake.nixosModules.sway = {pkgs, ...}: {
     security.polkit.enable = true;
+
+    xdg.portal.wlr = {
+      enable = true;
+      settings.screencast = {
+        chooser_type = "simple";
+        chooser_cmd = "${pkgs.slurp}/bin/slurp -f %o -or";
+      };
+    };
+
     programs.sway = {
       enable = true;
       xwayland.enable = true;
