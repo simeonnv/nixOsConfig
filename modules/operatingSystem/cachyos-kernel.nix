@@ -3,7 +3,7 @@
     kernel = pkgs.cachyosKernels.linux-cachyos-latest.override {
       pname = "linux";
 
-      lto = "full";
+      lto = "thin";
       processorOpt = "native";
     };
   in {
