@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  ownerProfile,
   ...
 }: {
   flake.homeModules.discord = {pkgs, ...}: {
@@ -30,7 +31,7 @@
           '';
       });
 
-      user = "simeon";
+      user = ownerProfile.name;
 
       config.themeLinks = ["https://refact0r.github.io/system24/theme/flavors/system24-rose-pine.theme.css"];
       # equicord only applies links listed in enabledThemeLinks, unlike vanilla vencord
