@@ -44,6 +44,8 @@
   }: {
     home.packages = with pkgs; [
       wofi
+      cliphist
+      wl-clipboard
       i3status
       networkmanagerapplet
       pulseaudio
@@ -60,6 +62,12 @@
 
       jq
     ];
+
+    xdg.configFile."swappy/config".text = ''
+      [Default]
+      save_dir=$HOME/Pictures/Screenshots
+      save_filename_format=screenshot-%Y%m%d-%H%M%S.png
+    '';
 
     services.mako = {
       enable = true;
@@ -147,6 +155,8 @@
         };
         startup = [
           {command = "nm-applet";}
+          {command = "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store";}
+          {command = "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store";}
         ];
         keybindings = lib.mkOptionDefault {
           "${modifier}+q" = "kill";
@@ -159,6 +169,8 @@
           "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
 
           "${modifier}+space" = "floating toggle";
+
+          "${modifier}+v" = "exec ${pkgs.cliphist}/bin/cliphist list | wofi --dmenu | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy";
 
           "${modifier}+l" = "exec swaylock -f -c 000000";
 
