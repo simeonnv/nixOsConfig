@@ -36,6 +36,7 @@
 
         settings = {
           "browser.toolbars.bookmarks.visibility" = "always";
+          "extensions.autoDisableScopes" = 0;
         };
       };
     };
