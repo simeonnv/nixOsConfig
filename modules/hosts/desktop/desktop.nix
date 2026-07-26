@@ -47,6 +47,7 @@
         jujutsu
         ai-slop
         cachyos-kernel
+        kicad
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

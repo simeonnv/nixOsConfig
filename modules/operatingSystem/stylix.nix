@@ -10,7 +10,8 @@
 
       # image = ./../../assets/blueLain.jpg;
       # image = ./../../assets/inabakumori.png;
-      image = ./../../assets/GLTStaircaseRosePine.png;
+      # image = ./../../assets/GLTStaircaseRosePine.png;
+      image = ./../../assets/OneShotRosePine.png;
       polarity = "dark";
 
       targets.grub.enable = false;
