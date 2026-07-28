@@ -2,7 +2,7 @@
   flake.nixosModules.thunar = {pkgs, ...}: {
     programs.thunar.enable = true;
     programs.xfconf.enable = true;
-    programs.thunar.plugins = with pkgs.xfce; [
+    programs.thunar.plugins = with pkgs; [
       thunar-archive-plugin
       thunar-volman
     ];

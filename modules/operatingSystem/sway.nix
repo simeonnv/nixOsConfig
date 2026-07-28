@@ -40,8 +40,11 @@
   flake.homeModules.sway = {
     pkgs,
     lib,
+    config,
     ...
-  }: {
+  }: let
+    colors = config.lib.stylix.colors.withHashtag;
+  in {
     home.packages = with pkgs; [
       wofi
       cliphist
@@ -55,6 +58,9 @@
       slurp
       swappy
 
+      wl-kbptr
+      wlrctl
+
       libappindicator-gtk3
 
       swaylock
@@ -62,6 +68,17 @@
 
       jq
     ];
+
+    xdg.configFile."wl-kbptr/config".text = ''
+      [mode_floating]
+      source=detect
+      label_color=${colors.base05}
+      label_select_color=${colors.base09}
+      selectable_bg_color=${colors.base00}cc
+      selectable_border_color=${colors.base0D}
+      unselectable_bg_color=${colors.base00}80
+      label_font_size=16 60% 120
+    '';
 
     xdg.configFile."swappy/config".text = ''
       [Default]
@@ -174,6 +191,13 @@
 
           "${modifier}+l" = "exec swaylock -f -c 000000";
 
+          "${modifier}+h" = "exec swaymsg -t get_config | ${pkgs.jq}/bin/jq -r '.config' | grep -E '^[[:space:]]*bindsym' | sed -E 's/^[[:space:]]*bindsym //' | wofi --dmenu -p 'Keybinds'";
+
+          # must NOT be in mouse mode while the overlay is up: sway binds (f/h/j/k/l...)
+          # take precedence over the overlay and eat the label keys
+          "${modifier}+apostrophe" = "exec '${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
+          "${modifier}+Shift+apostrophe" = "mode \"mouse\"";
+
           "${modifier}+Shift+q" = "exec swaymsg -t get_tree | ${pkgs.jq}/bin/jq '.. | select(.focused? == true) | select(.pid != null) | .pid' | xargs kill -9";
 
           "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
@@ -182,6 +206,27 @@
           "${modifier}+equal" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "${modifier}+minus" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
           "${modifier}+m" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        };
+        modes = lib.mkOptionDefault {
+          mouse = {
+            "f" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer click left, mode \"default\"";
+            "Shift+f" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer click left";
+            "r" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer click right, mode \"default\"";
+            "m" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer click middle, mode \"default\"";
+
+            "h" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer move -15 0";
+            "j" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer move 0 15";
+            "k" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer move 0 -15";
+            "l" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer move 15 0";
+
+            "d" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer scroll 15 0";
+            "u" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer scroll -15 0";
+
+            "apostrophe" = "mode \"default\", exec '${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
+
+            "Escape" = "mode \"default\"";
+            "Return" = "mode \"default\"";
+          };
         };
         bars = [
           {
