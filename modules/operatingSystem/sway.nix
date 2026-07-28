@@ -44,6 +44,11 @@
     ...
   }: let
     colors = config.lib.stylix.colors.withHashtag;
+    # NVIDIA screencopy hands back misaligned-stride buffers that crash pixman
+    # in detect mode; drop when https://github.com/moverest/wl-kbptr/pull/71 lands
+    wl-kbptr-patched = pkgs.wl-kbptr.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [./wl-kbptr-pr71-pixman-stride.patch];
+    });
   in {
     home.packages = with pkgs; [
       wofi
@@ -58,7 +63,7 @@
       slurp
       swappy
 
-      wl-kbptr
+      wl-kbptr-patched
       wlrctl
 
       libappindicator-gtk3
@@ -195,7 +200,7 @@
 
           # must NOT be in mouse mode while the overlay is up: sway binds (f/h/j/k/l...)
           # take precedence over the overlay and eat the label keys
-          "${modifier}+apostrophe" = "exec '${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
+          "${modifier}+apostrophe" = "exec '${wl-kbptr-patched}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
           "${modifier}+Shift+apostrophe" = "mode \"mouse\"";
 
           "${modifier}+Shift+q" = "exec swaymsg -t get_tree | ${pkgs.jq}/bin/jq '.. | select(.focused? == true) | select(.pid != null) | .pid' | xargs kill -9";
@@ -222,7 +227,7 @@
             "d" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer scroll 15 0";
             "u" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer scroll -15 0";
 
-            "apostrophe" = "mode \"default\", exec '${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
+            "apostrophe" = "mode \"default\", exec '${wl-kbptr-patched}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
 
             "Escape" = "mode \"default\"";
             "Return" = "mode \"default\"";
