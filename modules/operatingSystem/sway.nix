@@ -49,6 +49,26 @@
     wl-kbptr-patched = pkgs.wl-kbptr.overrideAttrs (old: {
       patches = (old.patches or []) ++ [./wl-kbptr-pr71-pixman-stride.patch];
     });
+    # i3status has no backlight module; inject a brightness block into its
+    # i3bar JSON stream, right after the volume block
+    i3status-with-brightness = pkgs.writeShellScript "i3status-with-brightness" ''
+      ${pkgs.i3status}/bin/i3status | {
+        read -r header && printf '%s\n' "$header"
+        read -r open && printf '%s\n' "$open"
+        while read -r line; do
+          prefix=""
+          case "$line" in
+            ,*) prefix=","; line=''${line#,} ;;
+          esac
+          pct=$(${pkgs.brightnessctl}/bin/brightnessctl -m | ${pkgs.coreutils}/bin/cut -d, -f4)
+          printf '%s%s\n' "$prefix" "$(printf '%s' "$line" | ${pkgs.jq}/bin/jq -c --arg b "☀ $pct" \
+            '(map(.name) | index("volume")) as $i
+             | if $i == null then .
+               else .[:$i + 1] + [{full_text: $b, name: "brightness"}] + .[$i + 1:]
+               end')"
+        done
+      }
+    '';
   in {
     home.packages = with pkgs; [
       wofi
@@ -101,6 +121,9 @@
       general = {
         colors = true;
         interval = 5;
+        # piped through i3status-with-brightness, so i3status can't auto-detect
+        # swaybar as its parent and would fall back to plain text
+        output_format = "i3bar";
       };
       modules = {
         "volume master" = {
@@ -121,7 +144,19 @@
         "tztime local" = {
           position = 3;
           settings = {
-            format = "%Y-%m-%d %H:%M:%S";
+            format = "TIME %Y-%m-%d %H:%M:%S";
+          };
+        };
+        "cpu_usage" = {
+          position = 8;
+          settings = {
+            format = "CPU %usage";
+          };
+        };
+        "memory" = {
+          position = 9;
+          settings = {
+            format = "RAM %used";
           };
         };
       };
@@ -205,10 +240,10 @@
 
           "${modifier}+Shift+q" = "exec swaymsg -t get_tree | ${pkgs.jq}/bin/jq '.. | select(.focused? == true) | select(.pid != null) | .pid' | xargs kill -9";
 
-          "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
-          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-          "${modifier}+bracketright" = "exec brightnessctl set +5%";
-          "${modifier}+bracketleft" = "exec brightnessctl set 5%-";
+          "XF86MonBrightnessUp" = "exec 'brightnessctl set +5%'";
+          "XF86MonBrightnessDown" = "exec 'brightnessctl set 5%-'";
+          "${modifier}+bracketright" = "exec 'brightnessctl set +5%'";
+          "${modifier}+bracketleft" = "exec 'brightnessctl set 5%-'";
 
           "${modifier}+equal" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "${modifier}+minus" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
@@ -238,7 +273,7 @@
         bars = [
           {
             position = "top";
-            statusCommand = "${pkgs.i3status}/bin/i3status";
+            statusCommand = "${i3status-with-brightness}";
             trayOutput = "*";
           }
         ];
