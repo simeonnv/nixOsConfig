@@ -64,6 +64,18 @@
 
     services.udisks2.enable = true;
 
+    boot.supportedFilesystems = ["ntfs"];
+    fileSystems."/mnt/data" = {
+      device = "/dev/disk/by-uuid/DA363EAA363E8791";
+      fsType = "ntfs-3g";
+      options = ["rw" "nofail" "uid=1000" "gid=100" "umask=022" "windows_names"];
+    };
+    fileSystems."/mnt/windows" = {
+      device = "/dev/disk/by-uuid/FC6833A968336216";
+      fsType = "ntfs-3g";
+      options = ["rw" "nofail" "uid=1000" "gid=100" "umask=022" "windows_names"];
+    };
+
     services.flatpak.enable = true;
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];

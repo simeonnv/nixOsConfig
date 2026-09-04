@@ -13,6 +13,7 @@
       hashcat
       hashcat-utils
       sqlmap
+      gitleaks
       binaryninja-free
       bettercap
       unixtools.netstat

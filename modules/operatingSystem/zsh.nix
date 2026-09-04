@@ -35,7 +35,7 @@
         update = "sudo nixos-rebuild switch --flake .";
         gs = "git status";
         gl = "git log --oneline --graph";
-        cc = "claude --model fable --effort high --dangerously-skip-permissions --chrome --max-turns 20";
+        cc = "claude --model fable --effort high --dangerously-skip-permissions --max-turns 20";
       };
 
       # oh-my-zsh = {
