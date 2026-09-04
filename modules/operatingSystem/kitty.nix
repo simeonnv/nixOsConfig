@@ -11,7 +11,8 @@
       enable = true;
       settings = {
         confirm_os_window_close = 0;
-        enable_audio_bell = false;
+        # enable_audio_bell = false;
+        bell_path = "${../../assets/pluh.ogg}";
       };
     };
   };
