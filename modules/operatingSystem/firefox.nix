@@ -20,7 +20,6 @@
             istilldontcareaboutcookies
             return-youtube-dislikes
             ublock-origin
-            youtube-shorts-block
           ];
         };
 
