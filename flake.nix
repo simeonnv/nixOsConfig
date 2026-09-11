@@ -26,6 +26,8 @@
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
 
+    deploy-rs.url = "github:serokell/deploy-rs";
+
     # driver stack (open-fprintd + python-validity) for the ThinkPad T480's 06cb:009a
     # fingerprint sensor; keeps its own nixpkgs pin, only tested against 24.11
     nixos-06cb-009a-fingerprint-sensor.url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor?ref=24.11";
@@ -39,7 +41,6 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
 
     nix-claude-code.url = "github:ryoppippi/nix-claude-code";
 

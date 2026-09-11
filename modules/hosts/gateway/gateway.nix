@@ -2,6 +2,7 @@
   inputs,
   self,
   ownerProfile,
+  deployLib,
   ...
 }: {
   flake.nixosConfigurations.gateway = inputs.nixpkgs.lib.nixosSystem {
@@ -21,12 +22,23 @@
         screen
         jujutsu
         ai-slop
+        sudo-server
+        deploy-target
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
         ./_disko.nix
       ];
+  };
+
+  flake.deploy.nodes.gateway = {
+    hostname = "51.195.40.164";
+    profiles.system = {
+      user = "root";
+      sshUser = "simeon";
+      path = deployLib.x86_64-linux.activate.nixos self.nixosConfigurations.gateway;
+    };
   };
 
   flake.nixosModules.gateway = {
