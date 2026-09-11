@@ -4,12 +4,12 @@
   ownerProfile,
   ...
 }: {
-  flake.nixosConfigurations.ppmg = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.gateway = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
         pkgs-stable
-        ppmg
+        gateway
         git
         fastfetch
         zsh
@@ -29,7 +29,13 @@
       ];
   };
 
-  flake.nixosModules.ppmg = {pkgs, ...}: {
+  flake.nixosModules.gateway = {
+    pkgs,
+    modulesPath,
+    ...
+  }: {
+    imports = [(modulesPath + "/profiles/qemu-guest.nix")];
+
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     networking.firewall.enable = true;
@@ -55,8 +61,7 @@
 
     nixpkgs.config.allowUnfree = true;
 
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
+    boot.loader.grub.enable = true;
     # boot.kernelParams = ["consoleblank=60"];
 
     services.logind.settings = {
