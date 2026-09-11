@@ -23,17 +23,41 @@
             root = {
               size = "100%";
               content = {
-                type = "btrfs";
-                extraArgs = ["-f"];
-                subvolumes = {
-                  "/root" = {
-                    mountpoint = "/";
-                  };
-                  "/home" = {
-                    mountpoint = "/home";
-                  };
-                  "/nix" = {
-                    mountpoint = "/nix";
+                type = "luks";
+                name = "cryptroot";
+                settings = {
+                  allowDiscards = true;
+                  bypassWorkqueues = true;
+                };
+                extraFormatArgs = [
+                  "--type"
+                  "luks2"
+                  "--cipher"
+                  "aes-xts-plain64"
+                  "--key-size"
+                  "512"
+                  "--hash"
+                  "sha512"
+                  "--pbkdf"
+                  "argon2id"
+                  "--pbkdf-memory"
+                  "1048576"
+                  "--iter-time"
+                  "4000"
+                ];
+                content = {
+                  type = "btrfs";
+                  extraArgs = ["-f"];
+                  subvolumes = {
+                    "/root" = {
+                      mountpoint = "/";
+                    };
+                    "/home" = {
+                      mountpoint = "/home";
+                    };
+                    "/nix" = {
+                      mountpoint = "/nix";
+                    };
                   };
                 };
               };
