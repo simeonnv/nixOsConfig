@@ -9,6 +9,7 @@
     modules = with self.nixosModules;
       [
         pkgs-stable
+        pkgs-multiverse
         thinkpad_t480
         sway
         greeter
@@ -62,6 +63,18 @@
     services."06cb-009a-fingerprint-sensor" = {
       enable = true;
       backend = "python-validity";
+    };
+
+    systemd.services = let
+      sleepTargets = [
+        "suspend.target"
+        "hibernate.target"
+        "hybrid-sleep.target"
+        "suspend-then-hibernate.target"
+      ];
+    in {
+      open-fprintd-suspend.wantedBy = sleepTargets;
+      open-fprintd-resume.wantedBy = sleepTargets;
     };
 
     security.pam.services = let

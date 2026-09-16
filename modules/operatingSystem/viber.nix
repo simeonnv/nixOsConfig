@@ -1,7 +1,7 @@
-{...}: {
-  flake.nixosModules.viber = {pkgs, ...}: {
+{
+  flake.nixosModules.viber = {pkgs-multiverse, ...}: {
     environment.systemPackages = [
-      pkgs.viber
+      (pkgs-multiverse.version "viber" "27.3.0.2")
     ];
   };
 }
