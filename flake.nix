@@ -48,6 +48,8 @@
     nixcord.url = "github:4evy/nixcord";
 
     concord.url = "github:chojs23/concord";
+
+    pi.url = "github:lukasl-dev/pi.nix";
   };
 
   outputs = inputs: let
