@@ -48,6 +48,7 @@
         ai-slop
         cachyos-kernel
         kicad
+        openrazer
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

@@ -195,6 +195,22 @@
       ];
     };
 
+    services.udiskie = {
+      enable = true;
+      automount = true;
+      notify = true;
+      tray = "never";
+      settings = {
+        program_options.file_manager = "thunar";
+        device_config = [
+          {
+            id_label = "keys";
+            options = ["noatime" "compress=zstd"];
+          }
+        ];
+      };
+    };
+
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
