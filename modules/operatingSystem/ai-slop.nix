@@ -140,6 +140,7 @@
         {
           defaultProvider = "anthropic";
           defaultModel = "claude-fable-5-1";
+          defaultThinkingLevel = "high";
 
           packages = map piPackage [
             "@ff-labs/pi-fff"
