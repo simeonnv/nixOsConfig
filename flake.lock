@@ -603,6 +603,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-multiverse": {
+      "locked": {
+        "lastModified": 1789387926,
+        "narHash": "sha256-oJd9l94KPeUku/f+2DjjWi6EipLNiqyXUadi/gd0WoY=",
+        "owner": "fzakaria",
+        "repo": "nixpkgs-multiverse",
+        "rev": "2643af47bc0839299800c5c1c99e5ade99a5f3fd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fzakaria",
+        "repo": "nixpkgs-multiverse",
+        "type": "github"
+      }
+    },
     "nixpkgs-nixcord": {
       "locked": {
         "lastModified": 1784160687,
@@ -786,6 +801,7 @@
         "nixcord": "nixcord",
         "nixos-06cb-009a-fingerprint-sensor": "nixos-06cb-009a-fingerprint-sensor",
         "nixpkgs": "nixpkgs_8",
+        "nixpkgs-multiverse": "nixpkgs-multiverse",
         "nixpkgs-stable": "nixpkgs-stable",
         "stylix": "stylix"
       }

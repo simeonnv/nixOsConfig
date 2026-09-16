@@ -10,6 +10,7 @@
     modules = with self.nixosModules;
       [
         pkgs-stable
+        pkgs-multiverse
         gateway
         git
         fastfetch

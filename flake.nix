@@ -7,6 +7,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-multiverse.url = "github:fzakaria/nixpkgs-multiverse";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -67,6 +68,11 @@
 
       perSystem = {system, ...}: {
         _module.args.pkgs-stable = import inputs.nixpkgs-stable {
+          inherit system;
+          config.allowUnfree = true;
+        };
+
+        _module.args.pkgs-multiverse = inputs.nixpkgs-multiverse.lib.mkMultiverse {
           inherit system;
           config.allowUnfree = true;
         };
