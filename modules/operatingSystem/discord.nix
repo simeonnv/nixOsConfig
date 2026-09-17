@@ -56,7 +56,6 @@
         fakeNitro.enable = true;
         fakeProfileThemes.enable = true;
         favoriteEmojiFirst.enable = true;
-        favoriteGifSearch.enable = true;
         favouriteAnything.enable = true;
         fixCodeblockGap.enable = true;
         forceOwnerCrown.enable = true;
