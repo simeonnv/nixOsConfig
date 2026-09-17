@@ -91,7 +91,7 @@
       pname = "pi-extensions";
       version = "0";
       src = ./pi-packages;
-      npmDepsHash = "sha256-P+HLUGZuFfau+79QDK9OhM/8Bj7Ke7urkUS4GpipUrg=";
+      npmDepsHash = "sha256-0CfOfmTYtMEnjCEsFdz6gAre8VcNCJRPd/r8a7XNATE=";
 
       dontNpmBuild = true;
 
@@ -143,12 +143,12 @@
           defaultThinkingLevel = "high";
 
           packages = map piPackage [
+            "@bytetrue/pi-web-search"
             "@ff-labs/pi-fff"
             "@sreetej510/pi-usage"
             "pi-lens"
             "pi-mcp-adapter"
             "pi-mono-clear"
-            "pi-web-search"
             "@gotgenes/pi-anthropic-auth"
             "@narumitw/pi-lsp"
             "@aliou/pi-processes"
