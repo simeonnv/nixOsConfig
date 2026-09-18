@@ -516,6 +516,26 @@
         "type": "sourcehut"
       }
     },
+    "nhx": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789659856,
+        "narHash": "sha256-eq9POVoha+COUDjm2GtvgJE2xoT3qJEPoa2J6XK55Ms=",
+        "owner": "Ra77a3l3-jar",
+        "repo": "nhx",
+        "rev": "ba959e67f460d9ac4cf2194f4a5b65d78d86d7d6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Ra77a3l3-jar",
+        "repo": "nhx",
+        "type": "github"
+      }
+    },
     "nix-cachyos-kernel": {
       "inputs": {
         "cachyos-kernel": "cachyos-kernel",
@@ -896,6 +916,7 @@
         "home-manager": "home-manager",
         "import-tree": "import-tree",
         "input-branches": "input-branches",
+        "nhx": "nhx",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nix-claude-code": "nix-claude-code",
         "nixcord": "nixcord",

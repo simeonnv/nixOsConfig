@@ -50,6 +50,11 @@
     concord.url = "github:chojs23/concord";
 
     pi.url = "github:lukasl-dev/pi.nix";
+
+    nhx = {
+      url = "github:Ra77a3l3-jar/nhx";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let

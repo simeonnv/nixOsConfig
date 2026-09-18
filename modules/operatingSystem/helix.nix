@@ -1,36 +1,102 @@
-{pkgs, ...}: {
+{inputs, ...}: {
   flake.homeModules.helix = {
+    config,
     lib,
     pkgs,
     ...
   }: let
-    yazi-picker = pkgs.writeShellScript "yazi-picker.sh" ''
-      paths=$(${pkgs.yazi}/bin/yazi "$2" --chooser-file=/dev/stdout | while read -r; do printf "%q " "$REPLY"; done)
+    hasStylixTheme = config.programs.helix.themes ? stylix;
+    stylixColors = config.lib.stylix.colors.withHashtag or null;
 
-      if [[ -n "$paths" ]]; then
-        ${pkgs.zellij}/bin/zellij action toggle-floating-panes
-        ${pkgs.zellij}/bin/zellij action write 27 # send <Escape> key
-        ${pkgs.zellij}/bin/zellij action write-chars ":$1 $paths"
-        ${pkgs.zellij}/bin/zellij action write 13 # send <Enter> key
-      else
-        ${pkgs.zellij}/bin/zellij action toggle-floating-panes
-      fi
-    '';
+    helixPlugins = config.programs.nhx.availablePlugins;
+
+    presence = helixPlugins.callPackage ./helix/_presence.nix {};
+
+    forest = helixPlugins.forest.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [./helix/forest-separator.patch];
+    });
+
+    helix-file-watcher = helixPlugins.helix-file-watcher.overrideAttrs (old: {
+      meta = old.meta // {license = lib.licenses.mit;};
+    });
   in {
-    programs.helix = {
-      defaultEditor = true;
+    imports = [inputs.nhx.homeManagerModules.default];
+
+    programs.helix.enable = false;
+
+    home.sessionVariables.EDITOR = "hx";
+    home.packages = with pkgs; [
+      steel
+      nixd
+      alejandra
+      rust-analyzer
+      omnisharp-roslyn
+      netcoredbg
+      taplo
+      yazi
+      ty
+    ];
+
+    xdg.configFile = {
+      "helix/themes/stylix.toml" = lib.mkIf hasStylixTheme {
+        source = config.programs.helix.themes.stylix;
+      };
+
+      "helix/helix.scm".source = ./helix/helix.scm;
+    };
+
+    programs.nhx = {
       enable = true;
-      extraPackages = with pkgs; [
-        nixd
-        alejandra
-        rust-analyzer
-        omnisharp-roslyn
-        netcoredbg
-        taplo
-        yazi
-        ty
-      ];
+
+      steel = {
+        enable = true;
+        lsp.enable = true;
+      };
+
+      plugins = {
+        helix-file-watcher = {
+          enable = true;
+          package = helix-file-watcher;
+          requirePath = "helix-file-watcher/file-watcher.scm";
+          extra = "(spawn-watcher 500)";
+        };
+        scooter.enable = true;
+        forest = {
+          enable = true;
+          package = forest;
+          config = {
+            position = "right";
+            ignore = [".git" "target" ".direnv" "result"];
+            circularKeybinds = true;
+            sidebarBg = lib.mkIf (stylixColors != null) {
+              focused = stylixColors.base00;
+              unfocused = stylixColors.base01;
+            };
+            searchColor = lib.mkIf (stylixColors != null) {
+              focused = stylixColors.base0D;
+              unfocused = stylixColors.base03;
+              followFocus = true;
+            };
+          };
+          extra =
+            ''
+              (forest-set-keybinds! (hash 'search "/"
+                                          'refresh "R"))
+              (forest-set-gap! 1)
+            ''
+            + lib.optionalString (stylixColors != null) ''
+              (forest-set-separator-color! "${stylixColors.base0D}") ; accent / iris on rose-pine
+            '';
+        };
+        helix-discord-rpc = {
+          enable = true;
+          package = presence;
+          extra = "(discord-rpc-connect)";
+        };
+      };
+
       settings = {
+        theme = lib.mkIf hasStylixTheme "stylix";
         editor = {
           lsp = {
             display-messages = true;
@@ -49,17 +115,11 @@
           completion-replace = true;
         };
         keys.normal = {
-          # "C-y" = [
-          #   ":sh rm -f /tmp/unique-file"
-          #   ":insert-output yazi '%{buffer_name}' --chooser-file=/tmp/unique-file"
-          #   ":insert-output echo \"\\x1b[?1049h\\x1b[?2004h\" > /dev/tty"
-          #   ":open %sh{cat /tmp/unique-file}"
-          #   ":redraw"
-          # ];
-          # [keys.normal]
-          C-y = ":sh zellij run -n Yazi -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- bash ${yazi-picker} open %{buffer_name}";
+          space.e = ":forest-open";
+          space.E = "file_explorer_in_current_buffer_directory";
         };
       };
+
       languages = {
         language-server.rust-analyzer.config = {
           assist = {

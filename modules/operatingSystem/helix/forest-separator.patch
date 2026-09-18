@@ -1,0 +1,80 @@
+--- a/forest.scm	2026-09-18 23:21:32.335118482 +0300
++++ b/forest.scm	2026-09-18 23:28:41.690223013 +0300
+@@ -26,6 +26,8 @@
+ (define *forest-search-default-focused* "#ffa500")
+ (define *forest-search-default-unfocused* "#ffffff")
+ (define *forest-search-follow-focus?* #t)
++(define *forest-separator-color* #f)
++(define *forest-gap* 0)
+ 
+ (define *forest-ignore-set*
+   (hashset ".git" "target" ".direnv" "node_modules" "__pycache__" ".hg"))
+@@ -146,6 +148,8 @@
+ (provide forest-set-keybinds!)
+ (provide forest-set-sidebar-bg!)
+ (provide forest-set-search-color!)
++(provide forest-set-separator-color!)
++(provide forest-set-gap!)
+ (provide forest-snack-circular-keybinds)
+ (provide forest-snacks-active?)
+ (provide forest-snacks-side)
+@@ -224,6 +228,16 @@
+   (set! *forest-search-color-unfocused* (or both (forest-hex->color unfocused)))
+   (set! *forest-search-follow-focus?* (if both #f follow-focus?)))
+ 
++;;@doc
++;; Color the snacks divider line between the tree and the buffer, #f blends it into the panel bg
++(define (forest-set-separator-color! hex)
++  (set! *forest-separator-color* (forest-hex->color hex)))
++
++;;@doc
++;; Blank columns kept between the buffer text and the snacks divider
++(define (forest-set-gap! n)
++  (set! *forest-gap* (max 0 n)))
++
+ ;; search box outline color for the current focus state
+ (define (forest-search-color)
+   (if (or (not *forest-search-follow-focus?*) *forest-focused*)
+@@ -1282,6 +1296,10 @@
+   (define w (min *forest-width* (area-width rect)))
+   (define h (area-height rect))
+   (define x0 (forest-panel-x0 rect w))
++  ;; on the right the divider sits in the column before the panel, so the
++  ;; buffer gives up that column plus the configured gap
++  (define sep-col (if (and *forest-show-separator?* (equal? *forest-side* 'right)) 1 0))
++  (define clip-w (min (area-width rect) (+ w sep-col *forest-gap*)))
+   ;; one blank row above the search box
+   (define y0 (forest-snacks-y0))
+   (define panel-h (max 1 (- h y0)))
+@@ -1289,9 +1307,9 @@
+   (if *forest-active*
+       (begin
+         (if (equal? *forest-side* 'right)
+-            (set-editor-clip-right! w)
+-            (set-editor-clip-left! w))
+-        (forest-publish-clip! *forest-side* w))
++            (set-editor-clip-right! clip-w)
++            (set-editor-clip-left! clip-w))
++        (forest-publish-clip! *forest-side* clip-w))
+       (forest-clear-clip!))
+ 
+   ;; theme components a configured sidebar background tints only these panel
+@@ -1311,8 +1329,16 @@
+   (define panel-area (area x0 y0 w panel-h))
+   (buffer/clear-with frame panel-area bg-style)
+ 
+-  ;; border matches bg so it blends in instead of clashing across themes;
+-  (define border-style bg-style)
++  ;; the gap keeps the buffer's own background rather than the panel tint
++  (when (> *forest-gap* 0)
++    (define gap-x (if (equal? *forest-side* 'right) (- x0 sep-col *forest-gap*) (+ x0 w)))
++    (when (>= gap-x 0)
++      (buffer/clear-with frame (area gap-x y0 *forest-gap* panel-h) (theme-scope-ref "ui.background"))))
++
++  ;; border matches bg so it blends in instead of clashing across themes,
++  ;; unless a separator color was configured
++  (define border-style
++    (if *forest-separator-color* (style-fg bg-style *forest-separator-color*) bg-style))
+ 
+   ;; on the divider side reserve the last column for the line
+   ;; entries stay flush left and fill up to one gap column before it
