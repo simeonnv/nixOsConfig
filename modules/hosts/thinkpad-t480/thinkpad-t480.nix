@@ -4,13 +4,13 @@
   ownerProfile,
   ...
 }: {
-  flake.nixosConfigurations.thinkpad_t480 = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.thinkpad-t480 = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
         pkgs-stable
         pkgs-multiverse
-        thinkpad_t480
+        thinkpad-t480
         sway
         greeter
         git
@@ -55,7 +55,7 @@
       ];
   };
 
-  flake.nixosModules.thinkpad_t480 = {pkgs, ...}: {
+  flake.nixosModules.thinkpad-t480 = {pkgs, ...}: {
     imports = [
       inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules."06cb-009a-fingerprint-sensor"
     ];
