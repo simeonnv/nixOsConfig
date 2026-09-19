@@ -3,46 +3,65 @@
   self,
   ownerProfile,
   deployLib,
+  lib,
   ...
-}: {
-  flake.nixosConfigurations.prodesk-server = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = with self.nixosModules;
-      [
-        pkgs-stable
-        pkgs-multiverse
-        prodesk-server
-        git
-        fastfetch
-        zsh
-        docker
-        ssh
-        kitty
-        sops
-        rust
-        screen
-        jujutsu
-        ai-slop
-        sudo-server
-        deploy-target
-      ]
-      ++ [
-        inputs.home-manager.nixosModules.home-manager
-        inputs.disko.nixosModules.disko
-        ./_disko.nix
-      ];
+}: let
+  prodesks = {
+    prodesk-server = {
+      hostname = "192.168.111.3";
+    };
+    # prodesk-2 = {
+    #   hostname = "192.168.111.4";
+    # };
   };
 
-  flake.deploy.nodes.prodesk-server = {
-    hostname = "192.168.111.3";
+  mkProdesk = name: cfg:
+    inputs.nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = with self.nixosModules;
+        [
+          pkgs-stable
+          pkgs-multiverse
+          prodesk-server
+          git
+          fastfetch
+          zsh
+          docker
+          ssh
+          kitty
+          sops
+          rust
+          screen
+          jujutsu
+          ai-slop
+          sudo-server
+          deploy-target
+        ]
+        ++ [
+          inputs.home-manager.nixosModules.home-manager
+          inputs.disko.nixosModules.disko
+          ./_disko.nix
+          ({...}: {
+            networking.hostName = name;
+            disko.devices.disk.main.device = lib.mkIf (cfg ? disk) cfg.disk;
+          })
+        ]
+        ++ (cfg.extraModules or []);
+    };
+
+  mkNode = name: cfg: {
+    inherit (cfg) hostname;
     profiles.system = {
       user = "root";
       sshUser = "simeon";
-      path = deployLib.x86_64-linux.activate.nixos self.nixosConfigurations.prodesk-server;
+      path = deployLib.x86_64-linux.activate.nixos self.nixosConfigurations.${name};
     };
   };
+in {
+  flake.nixosConfigurations = lib.mapAttrs mkProdesk prodesks;
+  flake.deploy.nodes = lib.mapAttrs mkNode prodesks;
 
-  flake.nixosModules.prodesk-server = {pkgs, ...}: {
+  flake.nixosModules.prodesk-server = {
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     hardware.cpu.amd.updateMicrocode = true;
@@ -50,7 +69,7 @@
 
     system.stateVersion = "25.11";
     home-manager.backupFileExtension = "backup";
-    home-manager.users.${ownerProfile.name} = {pkgs, ...}: {
+    home-manager.users.${ownerProfile.name} = {
       home.username = ownerProfile.name;
       home.homeDirectory = "/home/${ownerProfile.name}";
       home.stateVersion = "25.11";
@@ -87,7 +106,7 @@
     systemd.targets.hibernate.enable = false;
     systemd.targets.hybrid-sleep.enable = false;
 
-    networking.hostName = "prodesk-server";
+    networking.hostName = lib.mkDefault "prodesk-server";
     networking.networkmanager.enable = true;
 
     time.timeZone = "Europe/Sofia";
