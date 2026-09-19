@@ -33,7 +33,6 @@
           rust
           screen
           jujutsu
-          ai-slop
           sudo-server
           deploy-target
         ]

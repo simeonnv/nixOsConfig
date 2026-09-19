@@ -55,6 +55,8 @@
       url = "github:Ra77a3l3-jar/nhx";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    manifesto.url = "github:simeonnv/Manifesto";
   };
 
   outputs = inputs: let

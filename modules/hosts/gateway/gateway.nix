@@ -22,9 +22,10 @@
         rust
         screen
         jujutsu
-        ai-slop
         sudo-server
         deploy-target
+        caddy
+        manifesto
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -93,6 +94,10 @@
 
     networking.hostName = "gateway";
     networking.networkmanager.enable = true;
+
+    services.caddy.virtualHosts."manifesto.fravs.org".extraConfig = ''
+      reverse_proxy 127.0.0.1:8080
+    '';
 
     time.timeZone = "Europe/Sofia";
 
