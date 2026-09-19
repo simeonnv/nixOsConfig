@@ -35,6 +35,8 @@
           jujutsu
           sudo-server
           deploy-target
+          firefox-syncserver
+          rathole-client
         ]
         ++ [
           inputs.home-manager.nixosModules.home-manager
@@ -107,6 +109,12 @@ in {
 
     networking.hostName = lib.mkDefault "prodesk-server";
     networking.networkmanager.enable = true;
+
+    services.rathole.settings.client = {
+      remote_addr = "51.195.40.164:2333";
+      transport.noise.remote_public_key = "y21qMm2k9/9gC60ZX5sgeNpUpL/oKUEdjaRY39GiSDs=";
+      services.firefox-sync.local_addr = "127.0.0.1:5000";
+    };
 
     time.timeZone = "Europe/Sofia";
 

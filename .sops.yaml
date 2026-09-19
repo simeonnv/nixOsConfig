@@ -1,0 +1,14 @@
+keys:
+  # personal key, derived from ~/.ssh/id_ed25519.pub via ssh-to-age - needed to edit secrets locally
+  - &simeon age1g092vf4c3sqnexvs6lv3ytrkagzad5cv7su9gznkgg4hh0g6vcasmk8zxq
+  # host keys, derived from /etc/ssh/ssh_host_ed25519_key.pub via ssh-to-age
+  - &gateway age1qrp4a7vj7rruz24k6wys4xhhmx7tt5d46ssgam6tfq8dr6d2apfs2r82x0
+  - &prodesk-server age134ld5dwpszxl85jwyx64w5tl3u3ndljpplaelhpm5x7gxw973yeqstcrsh
+
+creation_rules:
+  - path_regex: secrets/.*
+    key_groups:
+      - age:
+          - *simeon
+          - *gateway
+          - *prodesk-server

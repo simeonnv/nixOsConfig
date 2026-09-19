@@ -9,6 +9,11 @@
   in {
     programs.firefox = {
       enable = true;
+      package = pkgs.firefox.override {
+        extraPrefs = ''
+          lockPref("identity.sync.tokenserver.uri", "https://sync.fravs.org/1.0/sync/1.5");
+        '';
+      };
       profiles.${ownerProfile.name} = {
         name = ownerProfile.name;
         isDefault = true;

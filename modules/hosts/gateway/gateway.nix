@@ -26,6 +26,7 @@
         deploy-target
         caddy
         manifesto
+        rathole-server
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -43,11 +44,7 @@
     };
   };
 
-  flake.nixosModules.gateway = {
-    pkgs,
-    modulesPath,
-    ...
-  }: {
+  flake.nixosModules.gateway = {modulesPath, ...}: {
     imports = [(modulesPath + "/profiles/qemu-guest.nix")];
 
     nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -56,7 +53,7 @@
 
     system.stateVersion = "25.11";
     home-manager.backupFileExtension = "backup";
-    home-manager.users.${ownerProfile.name} = {pkgs, ...}: {
+    home-manager.users.${ownerProfile.name} = {
       home.username = ownerProfile.name;
       home.homeDirectory = "/home/${ownerProfile.name}";
       home.stateVersion = "25.11";
@@ -98,6 +95,16 @@
     services.caddy.virtualHosts."manifesto.fravs.org".extraConfig = ''
       reverse_proxy 127.0.0.1:8080
     '';
+
+    services.caddy.virtualHosts."sync.fravs.org".extraConfig = ''
+      reverse_proxy 127.0.0.1:5000
+    '';
+
+    services.rathole.settings.server = {
+      bind_addr = "0.0.0.0:2333";
+      services.firefox-sync.bind_addr = "127.0.0.1:5000";
+    };
+    networking.firewall.allowedTCPPorts = [2333];
 
     time.timeZone = "Europe/Sofia";
 
