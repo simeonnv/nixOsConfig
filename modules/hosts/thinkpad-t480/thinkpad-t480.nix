@@ -55,7 +55,7 @@
       ];
   };
 
-  flake.nixosModules.thinkpad_t480 = {
+  flake.nixosModules.thinkpad-t480 = {
     pkgs,
     lib,
     ...
