@@ -55,7 +55,11 @@
       ];
   };
 
-  flake.nixosModules.thinkpad-t480 = {pkgs, ...}: {
+  flake.nixosModules.thinkpad_t480 = {
+    pkgs,
+    lib,
+    ...
+  }: {
     imports = [
       inputs.nixos-06cb-009a-fingerprint-sensor.nixosModules."06cb-009a-fingerprint-sensor"
     ];
@@ -74,7 +78,31 @@
       ];
     in {
       open-fprintd-suspend.wantedBy = sleepTargets;
-      open-fprintd-resume.wantedBy = sleepTargets;
+
+      open-fprintd-resume = {
+        wantedBy = sleepTargets;
+        serviceConfig.ExecStart = lib.mkForce [
+          ""
+          (pkgs.writeShellScript "open-fprintd-resume" ''
+            set -u
+            systemctl=${pkgs.systemd}/bin/systemctl
+
+            for attempt in $(seq 1 10); do
+              sleep 2
+              echo "restarting fingerprint driver stack (attempt $attempt)"
+              $systemctl restart open-fprintd.service python3-validity.service
+              sleep 4
+              if $systemctl is-active --quiet python3-validity.service; then
+                echo "fingerprint sensor back online"
+                exit 0
+              fi
+            done
+
+            echo "fingerprint sensor did not come back after resume" >&2
+            exit 1
+          '')
+        ];
+      };
     };
 
     security.pam.services = let
@@ -105,11 +133,22 @@
     system.stateVersion = "25.11";
     # imports = [./_hardware-configuration.nix];
     home-manager.backupFileExtension = "backup";
-    home-manager.users.${ownerProfile.name} = {pkgs, ...}: {
+    home-manager.users.${ownerProfile.name} = {
+      pkgs,
+      lib,
+      ...
+    }: {
       home.username = ownerProfile.name;
       home.homeDirectory = "/home/${ownerProfile.name}";
       home.stateVersion = "25.11";
       services.udiskie.enable = true;
+      wayland.windowManager.sway = {
+        config.input."type:touchpad".tap = lib.mkForce "disabled";
+        extraConfig = ''
+          bindgesture pinch:inward nop
+          bindgesture pinch:outward nop
+        '';
+      };
       imports = with self.homeModules; [
         sway
         discord
@@ -165,6 +204,8 @@
 
     services.udev.extraRules = ''
       ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", MODE="0666", GROUP="dialout"
+      # the 06cb:009a sensor re-enumerates on resume; restart the driver when it reappears
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="06cb", ATTR{idProduct}=="009a", TAG+="systemd", ENV{SYSTEMD_WANTS}+="python3-validity.service"
     '';
   };
 }
