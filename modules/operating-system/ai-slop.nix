@@ -91,7 +91,7 @@
       pname = "pi-extensions";
       version = "0";
       src = ./pi-packages;
-      npmDepsHash = "sha256-0CfOfmTYtMEnjCEsFdz6gAre8VcNCJRPd/r8a7XNATE=";
+      npmDepsHash = "sha256-dO+s/qA0t6//8djhaVaf/XWMyKlnCapbjMj+0nBbNWE=";
 
       dontNpmBuild = true;
 
@@ -152,6 +152,7 @@
             "@gotgenes/pi-anthropic-auth"
             "@narumitw/pi-lsp"
             "@aliou/pi-processes"
+            "pi-typesafe"
           ];
         }
         // lib.optionalAttrs hasStylix {theme = "stylix";};
