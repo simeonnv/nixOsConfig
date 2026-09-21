@@ -48,6 +48,17 @@
     programs.nhx = {
       enable = true;
 
+      package = pkgs.steelix.override {
+        helix = pkgs.helix.override {
+          lockedGrammars = lib.recursiveUpdate (lib.importJSON "${pkgs.path}/pkgs/by-name/he/helix/grammars.json") {
+            rust.nurl.args = {
+              rev = "261b20226c04ef601adbdf185a800512a5f66291";
+              hash = "sha256-i6OrbcHNkrsAW5cpYOI7r0F6xn94KZWB9ZJMUH+k2ds=";
+            };
+          };
+        };
+      };
+
       steel = {
         enable = true;
         lsp.enable = true;
