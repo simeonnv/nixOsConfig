@@ -139,7 +139,7 @@
       settings =
         {
           defaultProvider = "anthropic";
-          defaultModel = "claude-fable-5-1";
+          defaultModel = "claude-opus-5-5";
           defaultThinkingLevel = "high";
 
           packages = map piPackage [
