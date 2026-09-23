@@ -91,7 +91,7 @@
       pname = "pi-extensions";
       version = "0";
       src = ./pi-packages;
-      npmDepsHash = "sha256-dO+s/qA0t6//8djhaVaf/XWMyKlnCapbjMj+0nBbNWE=";
+      npmDepsHash = "sha256-zBfaAcA2iH+/zSRoMRY57QCf+oNokbavfakdRsvBU1U=";
 
       dontNpmBuild = true;
 
