@@ -55,6 +55,18 @@
               rev = "261b20226c04ef601adbdf185a800512a5f66291";
               hash = "sha256-i6OrbcHNkrsAW5cpYOI7r0F6xn94KZWB9ZJMUH+k2ds=";
             };
+            javascript.nurl.args = {
+              rev = "3a837b6f3658ca3618f2022f8707e29739c91364";
+              hash = "sha256-apgWWYD0XOvH5c3BY7kAF7UYtwPJaEvJzC5aWvJ9YQ8=";
+            };
+            typescript.nurl.args = {
+              rev = "75b3874edb2dc714fb1fd77a32013d0f8699989f";
+              hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
+            };
+            tsx.nurl.args = {
+              rev = "75b3874edb2dc714fb1fd77a32013d0f8699989f";
+              hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
+            };
           };
         };
       };
