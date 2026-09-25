@@ -186,6 +186,11 @@
     time.timeZone = "Europe/Sofia";
     services.upower.enable = true;
 
+    services.logind.settings.Login = {
+      HandlePowerKey = "ignore";
+      HandlePowerKeyLongPress = "ignore";
+    };
+
     environment.systemPackages = [
       pkgs.usbutils
       pkgs.nodejs
