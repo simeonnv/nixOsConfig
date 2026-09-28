@@ -4,14 +4,6 @@
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-    nixpkgs.overlays = [
-      (final: prev: {
-        xdg-desktop-portal-wlr = prev.xdg-desktop-portal-wlr.overrideAttrs (old: {
-          patches = (old.patches or []) ++ [./xdpw-pr389-screencast-retry.patch];
-        });
-      })
-    ];
-
     xdg.portal.wlr = {
       enable = true;
       settings.screencast = {
@@ -172,16 +164,10 @@
 
     services.swayidle = {
       enable = true;
-      events = [
-        {
-          event = "before-sleep";
-          command = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
-        }
-        {
-          event = "lock";
-          command = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
-        }
-      ];
+      events = {
+        before-sleep = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
+        lock = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
+      };
       timeouts = [
         {
           timeout = 300;

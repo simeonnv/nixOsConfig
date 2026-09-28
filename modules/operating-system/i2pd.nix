@@ -6,9 +6,11 @@
   flake.nixosModules.i2pd = {pkgs, ...}: {
     services.i2pd = {
       enable = true;
-      bandwidth = 64;
-      port = 31835;
-      upnp.enable = false;
+      settings = {
+        bandwidth = 64;
+        port = 31835;
+        upnp.enabled = false;
+      };
     };
 
     networking.firewall = {

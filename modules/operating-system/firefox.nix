@@ -9,6 +9,7 @@
   in {
     programs.firefox = {
       enable = true;
+      configPath = ".mozilla/firefox";
       package = pkgs.firefox.override {
         extraPrefs = ''
           lockPref("identity.sync.tokenserver.uri", "https://sync.fravs.org/1.0/sync/1.5");
