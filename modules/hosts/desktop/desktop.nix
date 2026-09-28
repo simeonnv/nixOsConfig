@@ -101,6 +101,7 @@
         eza
         zellij
         direnv
+        cluster-ssh
       ];
     };
 

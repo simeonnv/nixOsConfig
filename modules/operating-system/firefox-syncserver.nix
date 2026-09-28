@@ -15,6 +15,7 @@
 
     services.firefox-syncserver = {
       enable = true;
+      database.type = "mysql";
       package = pkgs-stable.syncstorage-rs;
       secrets = config.sops.secrets."firefox-syncserver.env".path;
 

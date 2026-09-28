@@ -27,6 +27,7 @@
         caddy
         manifesto
         rathole-server
+        gateway-ssh-tunnels
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

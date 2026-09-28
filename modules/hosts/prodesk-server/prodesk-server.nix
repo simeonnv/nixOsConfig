@@ -4,16 +4,20 @@
   ownerProfile,
   deployLib,
   lib,
+  config,
   ...
 }: let
   prodesks = {
     prodesk-server = {
       hostname = "192.168.111.3";
+      sshTunnelPort = 2201;
     };
     # prodesk-2 = {
     #   hostname = "192.168.111.4";
     # };
   };
+
+  gatewayHost = config.flake.deploy.nodes.gateway.hostname;
 
   mkProdesk = name: cfg:
     inputs.nixpkgs.lib.nixosSystem {
@@ -45,6 +49,7 @@
           ({...}: {
             networking.hostName = name;
             disko.devices.disk.main.device = lib.mkIf (cfg ? disk) cfg.disk;
+            services.rathole.settings.client.services."ssh-${name}".local_addr = "127.0.0.1:22";
           })
         ]
         ++ (cfg.extraModules or []);
@@ -61,6 +66,37 @@
 in {
   flake.nixosConfigurations = lib.mapAttrs mkProdesk prodesks;
   flake.deploy.nodes = lib.mapAttrs mkNode prodesks;
+
+  flake.nixosModules.gateway-ssh-tunnels = {
+    services.rathole.settings.server.services =
+      lib.mapAttrs' (name: cfg:
+        lib.nameValuePair "ssh-${name}" {
+          bind_addr = "127.0.0.1:${toString cfg.sshTunnelPort}";
+        })
+      prodesks;
+  };
+
+  flake.homeModules.cluster-ssh = {
+    programs.ssh = {
+      enable = true;
+      enableDefaultConfig = false;
+      matchBlocks =
+        {
+          gateway = {
+            hostname = gatewayHost;
+            user = ownerProfile.name;
+          };
+        }
+        // lib.mapAttrs (name: cfg: {
+          hostname = "127.0.0.1";
+          port = cfg.sshTunnelPort;
+          user = ownerProfile.name;
+          proxyJump = "gateway";
+          extraOptions.HostKeyAlias = name;
+        })
+        prodesks;
+    };
+  };
 
   flake.nixosModules.prodesk-server = {
     nix.settings.experimental-features = ["nix-command" "flakes"];

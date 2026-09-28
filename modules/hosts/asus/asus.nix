@@ -88,6 +88,7 @@
         zellij
         direnv
         discord
+        cluster-ssh
       ];
     };
 
