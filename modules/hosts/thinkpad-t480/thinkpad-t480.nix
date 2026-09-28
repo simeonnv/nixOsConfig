@@ -120,7 +120,7 @@
         rules.auth.fprintd.args = fprintArgs;
       };
       swaylock = passwordFirstFprint;
-      greetd = passwordFirstFprint;
+      login = passwordFirstFprint;
     };
 
     nix.settings.experimental-features = ["nix-command" "flakes"];
