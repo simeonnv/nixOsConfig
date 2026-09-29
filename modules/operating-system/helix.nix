@@ -19,6 +19,72 @@
     helix-file-watcher = helixPlugins.helix-file-watcher.overrideAttrs (old: {
       meta = old.meta // {license = lib.licenses.mit;};
     });
+
+    steelixGrammarsJson = ./helix/grammars.json;
+    steelixGrammars = lib.importJSON steelixGrammarsJson;
+    steelixSrc = pkgs.steelix.unwrapped.src;
+
+    grammarsCheck =
+      pkgs.runCommand "steelix-grammars-check" {
+        nativeBuildInputs = [pkgs.remarshal pkgs.jq];
+      } ''
+        toml2json ${steelixSrc}/languages.toml \
+          | jq -r '.grammar[] | select(.source.git? and .source.rev?) | "\(.name | gsub("_"; "-")) \(.source.rev)"' \
+          | sort > want
+        jq -r 'to_entries[] | "\(.key) \(.value.nurl.args.rev)"' ${steelixGrammarsJson} | sort > have
+        if ! diff -u want have; then
+          echo "modules/operating-system/helix/grammars.json is out of sync with steelix ${steelixSrc.rev}." >&2
+          echo "Regenerate it (see comment in modules/operating-system/helix.nix)." >&2
+          exit 1
+        fi
+        touch $out
+      '';
+
+    tolerantGrammarsOverlay = _: prev:
+      lib.mapAttrs (_: drv:
+        if lib.isDerivation drv
+        then
+          drv.overrideAttrs (old:
+            lib.optionalAttrs (lib.hasInfix "tree-sitter.json" (old.postPatch or "")) {
+              postPatch = ''
+                if [[ -e tree-sitter.json ]]; then
+                ${old.postPatch}
+                fi
+              '';
+            })
+        else drv)
+      prev;
+
+    extraGrammarsOverlay = _: _: {
+      tree-sitter-robots = let
+        g = steelixGrammars.robots;
+      in
+        (pkgs.tree-sitter-grammars.tree-sitter-robots-txt.override {language = "robots";}).overrideAttrs {
+          version = lib.sources.shortRev g.nurl.args.rev;
+          src = pkgs.${g.nurl.fetcher} g.nurl.args;
+        };
+    };
+
+    steelix =
+      (pkgs.steelix.override {
+        helix =
+          pkgs.helix
+          // {
+            override = args:
+              pkgs.helix.override (args
+                // {
+                  lockedGrammars = steelixGrammars;
+                  grammarsOverlay = lib.composeManyExtensions [
+                    (args.grammarsOverlay or (_: _: {}))
+                    tolerantGrammarsOverlay
+                    extraGrammarsOverlay
+                  ];
+                });
+          };
+      }).overrideAttrs {
+        # depend on the check so a stale lockfile fails the build instead of going gray
+        inherit grammarsCheck;
+      };
   in {
     imports = [inputs.nhx.homeManagerModules.default];
 
@@ -48,28 +114,7 @@
     programs.nhx = {
       enable = true;
 
-      package = pkgs.steelix.override {
-        helix = pkgs.helix.override {
-          lockedGrammars = lib.recursiveUpdate (lib.importJSON "${pkgs.path}/pkgs/by-name/he/helix/grammars.json") {
-            rust.nurl.args = {
-              rev = "261b20226c04ef601adbdf185a800512a5f66291";
-              hash = "sha256-i6OrbcHNkrsAW5cpYOI7r0F6xn94KZWB9ZJMUH+k2ds=";
-            };
-            javascript.nurl.args = {
-              rev = "3a837b6f3658ca3618f2022f8707e29739c91364";
-              hash = "sha256-apgWWYD0XOvH5c3BY7kAF7UYtwPJaEvJzC5aWvJ9YQ8=";
-            };
-            typescript.nurl.args = {
-              rev = "75b3874edb2dc714fb1fd77a32013d0f8699989f";
-              hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
-            };
-            tsx.nurl.args = {
-              rev = "75b3874edb2dc714fb1fd77a32013d0f8699989f";
-              hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
-            };
-          };
-        };
-      };
+      package = steelix;
 
       steel = {
         enable = true;

@@ -46,6 +46,7 @@
         ai-slop
         tlp
         cachyos-kernel
+        obs-studio
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

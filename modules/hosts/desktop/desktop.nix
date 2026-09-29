@@ -50,6 +50,7 @@
         cachyos-kernel
         kicad
         openrazer
+        obs-studio
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
