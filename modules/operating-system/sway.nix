@@ -105,7 +105,14 @@
 
     services.mako = {
       enable = true;
-      defaultTimeout = 5000;
+      settings.default-timeout = 5000;
+      extraConfig = ''
+        [mode=do-not-disturb]
+        invisible=1
+
+        [mode=do-not-disturb app-name=dnd-toggle]
+        invisible=0
+      '';
     };
 
     programs.i3status = {
@@ -113,8 +120,6 @@
       general = {
         colors = true;
         interval = 5;
-        # piped through i3status-with-brightness, so i3status can't auto-detect
-        # swaybar as its parent and would fall back to plain text
         output_format = "i3bar";
       };
       modules = {
@@ -235,8 +240,6 @@
 
           "${modifier}+h" = "exec swaymsg -t get_config | ${pkgs.jq}/bin/jq -r '.config' | grep -E '^[[:space:]]*bindsym' | sed -E 's/^[[:space:]]*bindsym //' | wofi --dmenu -p 'Keybinds'";
 
-          # must NOT be in mouse mode while the overlay is up: sway binds (f/h/j/k/l...)
-          # take precedence over the overlay and eat the label keys
           "${modifier}+apostrophe" = "exec '${wl-kbptr-patched}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
           "${modifier}+Shift+apostrophe" = "mode \"mouse\"";
 
@@ -250,6 +253,8 @@
           "${modifier}+equal" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
           "${modifier}+minus" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
           "${modifier}+m" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+
+          "${modifier}+n" = "exec '${pkgs.mako}/bin/makoctl mode -t do-not-disturb && if ${pkgs.mako}/bin/makoctl mode | grep -q do-not-disturb; then ${pkgs.libnotify}/bin/notify-send -a dnd-toggle -t 2000 \"Notifications off\"; else ${pkgs.libnotify}/bin/notify-send -a dnd-toggle -t 2000 \"Notifications on\"; fi'";
         };
         modes = lib.mkOptionDefault {
           mouse = {
