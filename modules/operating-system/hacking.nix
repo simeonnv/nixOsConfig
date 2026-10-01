@@ -23,6 +23,9 @@
       ethtool
       pciutils
       usbutils
+
+      tor-browser
+      tor
     ];
   };
 }
