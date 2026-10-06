@@ -132,7 +132,13 @@
     programs.pi.coding-agent = {
       enable = true;
 
-      rules = ''Do not ever commit on git. Always ask before doing a change. Don't ever push to prod.'';
+      rules = ''
+        Do not ever commit on git.
+        Always ask before doing a change.
+        Don't ever push to prod.
+        Dont ever write comments.
+        Ask questions when the goal is unclear.
+      '';
 
       themes = lib.optional hasStylix piTheme;
 
