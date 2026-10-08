@@ -51,11 +51,6 @@
 
     pi.url = "github:lukasl-dev/pi.nix";
 
-    nhx = {
-      url = "github:Ra77a3l3-jar/nhx";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     manifesto.url = "github:simeonnv/Manifesto";
 
     sops-nix = {

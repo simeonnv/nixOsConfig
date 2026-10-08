@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  inputs,
+  self,
+  ...
+}: {
   flake.nixosModules.ai-slop = {
     config,
     pkgs,
@@ -87,6 +91,31 @@
       };
     };
 
+    piModels = (pkgs.formats.json {}).generate "pi-models.json" {
+      providers.abliteration = {
+        baseUrl = "https://api.abliteration.ai/v1";
+        api = "openai-completions";
+        apiKey = "!SOPS_AGE_KEY_CMD=\"${pkgs.ssh-to-age}/bin/ssh-to-age -private-key -i $HOME/.ssh/id_ed25519\" ${pkgs.sops}/bin/sops decrypt --extract '[\"abliteration-api-key\"]' ${self + /secrets/ai.yaml}";
+        models = [
+          {
+            id = "abliterated-model-large-v2";
+            name = "Abliterated Large v2 (GLM-5.3)";
+            reasoning = true;
+            thinkingLevelMap.off = "none";
+            input = ["text"];
+            contextWindow = 1000000;
+            maxTokens = 65536;
+            cost = {
+              input = 3;
+              output = 5;
+              cacheRead = 0.3;
+              cacheWrite = 0;
+            };
+          }
+        ];
+      };
+    };
+
     piExtensions = pkgs.buildNpmPackage {
       pname = "pi-extensions";
       version = "0";
@@ -141,6 +170,8 @@
       '';
 
       themes = lib.optional hasStylix piTheme;
+
+      models = piModels;
 
       settings =
         {

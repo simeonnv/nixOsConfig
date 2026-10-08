@@ -68,12 +68,11 @@ in {
   flake.deploy.nodes = lib.mapAttrs mkNode prodesks;
 
   flake.nixosModules.gateway-ssh-tunnels = {
-    services.rathole.settings.server.services =
-      lib.mapAttrs' (name: cfg:
-        lib.nameValuePair "ssh-${name}" {
-          bind_addr = "127.0.0.1:${toString cfg.sshTunnelPort}";
-        })
-      prodesks;
+    services.rathole.settings.server.services = lib.mapAttrs' (name: cfg:
+      lib.nameValuePair "ssh-${name}" {
+        bind_addr = "127.0.0.1:${toString cfg.sshTunnelPort}";
+      })
+    prodesks;
   };
 
   flake.homeModules.cluster-ssh = {
@@ -153,6 +152,10 @@ in {
     };
 
     time.timeZone = "Europe/Sofia";
+
+    services.tor = {
+      enable = true;
+    };
 
     users.users.${ownerProfile.name} = {
       isNormalUser = true;
