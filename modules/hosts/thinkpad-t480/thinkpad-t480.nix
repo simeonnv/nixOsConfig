@@ -47,6 +47,7 @@
         tlp
         cachyos-kernel
         obs-studio
+        mullvad
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

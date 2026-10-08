@@ -51,6 +51,7 @@
         kicad
         openrazer
         obs-studio
+        mullvad
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

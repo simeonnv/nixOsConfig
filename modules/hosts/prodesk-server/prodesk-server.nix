@@ -41,6 +41,7 @@
           deploy-target
           firefox-syncserver
           rathole-client
+          mullvad
         ]
         ++ [
           inputs.home-manager.nixosModules.home-manager
