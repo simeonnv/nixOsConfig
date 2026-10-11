@@ -25,6 +25,7 @@
         sudo-server
         deploy-target
         caddy
+        anubis
         manifesto
         rathole-server
         gateway-ssh-tunnels
@@ -93,8 +94,19 @@
     networking.hostName = "gateway";
     networking.networkmanager.enable = true;
 
+    services.anubis.instances.manifesto = {
+      settings.TARGET = "http://127.0.0.1:8080";
+      settings.DIFFICULTY = 5;
+      policy.settings.store = {
+        backend = "bbolt";
+        parameters.path = "/var/lib/anubis-manifesto/anubis.bdb";
+      };
+    };
+
     services.caddy.virtualHosts."manifesto.fravs.org".extraConfig = ''
-      reverse_proxy 127.0.0.1:8080
+      reverse_proxy unix//run/anubis/anubis-manifesto/anubis.sock {
+        header_up X-Real-Ip {client_ip}
+      }
     '';
 
     services.caddy.virtualHosts."sync.fravs.org".extraConfig = ''

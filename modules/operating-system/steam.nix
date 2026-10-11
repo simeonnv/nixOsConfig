@@ -9,7 +9,9 @@
 
     environment.systemPackages = [
       pkgs.steam-run
-      pkgs.appimage-run
+      (pkgs.appimage-run.override {
+        extraPkgs = p: [p.webkitgtk_4_1 p.glib-networking p.libsoup_3];
+      })
       pkgs.gamemode
       pkgs.mangohud
       pkgs.steamcmd
