@@ -97,9 +97,22 @@
     services.anubis.instances.manifesto = {
       settings.TARGET = "http://127.0.0.1:8080";
       settings.DIFFICULTY = 5;
-      policy.settings.store = {
-        backend = "bbolt";
-        parameters.path = "/var/lib/anubis-manifesto/anubis.bdb";
+      policy.settings = {
+        store = {
+          backend = "bbolt";
+          parameters.path = "/var/lib/anubis-manifesto/anubis.bdb";
+        };
+        thresholds = [
+          {
+            name = "challenge";
+            expression = "weight > 0";
+            action = "CHALLENGE";
+            challenge = {
+              algorithm = "fast";
+              difficulty = 5;
+            };
+          }
+        ];
       };
     };
 
