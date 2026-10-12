@@ -8,6 +8,7 @@
     system = "x86_64-linux";
     modules = with self.nixosModules;
       [
+        nix-cache
         pkgs-stable
         pkgs-multiverse
         asus

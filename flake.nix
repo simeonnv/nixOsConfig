@@ -53,6 +53,11 @@
 
     manifesto.url = "github:simeonnv/Manifesto";
 
+    syphoria = {
+      url = "git+https://codeberg.org/simeonnv/syphoria";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";

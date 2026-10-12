@@ -29,6 +29,7 @@
         manifesto
         rathole-server
         gateway-ssh-tunnels
+        syphoria-gateway
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

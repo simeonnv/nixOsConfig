@@ -42,6 +42,7 @@
           firefox-syncserver
           rathole-client
           mullvad
+          syphoria
         ]
         ++ [
           inputs.home-manager.nixosModules.home-manager
