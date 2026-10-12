@@ -68,6 +68,17 @@
     ownerProfile = {
       name = "simeon";
       email = "simmeon.nv@proton.me";
+      sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAz6cbpujcaBo5eAb4+c30kaD5T9wUXAtv5XS98BNACI simmeon.nv@proton.me";
+    };
+    goshoProfile = {
+      name = "gosho";
+      email = "geshoo46@gmail.com";
+      sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOl+LmY2Pu7AeBrC5z4nK7bEPF0ylw4vOg8F7kgk44gz geshoo46@gmail.com";
+    };
+    sashoProfile = {
+      name = "sasho";
+      email = "SashkoV2@proton.me";
+      sshKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHFb8GzWv9pej52qpJkPYXGkNYzFMCwRfefN3CYE3Zhl SashkoV2@proton.me";
     };
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
@@ -93,7 +104,7 @@
       };
 
       _module.args = {
-        ownerProfile = ownerProfile;
+        inherit ownerProfile goshoProfile sashoProfile;
       };
     };
 }

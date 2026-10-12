@@ -3,6 +3,8 @@
   self,
   config,
   ownerProfile,
+  goshoProfile,
+  sashoProfile,
   ...
 }: let
   domains = ["fravs.org" "larp-sec.com"];
@@ -20,7 +22,6 @@
   gatewayHost = config.flake.deploy.nodes.gateway.hostname;
   gatewayHostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILbNp6vBDs/7HA1mbdvtCUwcwEegSxoLgeZ+cXOllZoy";
   relayPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIct7EjgftogSvc1a7c5qPNUjfbU1/Jwbal8QYvsRSIA syphoria-relay";
-  ownerKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAz6cbpujcaBo5eAb4+c30kaD5T9wUXAtv5XS98BNACI simmeon.nv@proton.me";
 
   sopsFile = self + /secrets/syphoria.yaml;
 in {
@@ -59,14 +60,23 @@ in {
       '';
       restartUnits = ["stalwart-dkim.service"];
     };
+    #
 
     services.syphoria = {
       enable = true;
       settings = {
         inherit domains;
-        server.listen = "127.0.0.1:${toString sshPort}";
+        server.listen = "0.0.0.0:${toString sshPort}";
         users.${ownerProfile.name} = {
-          ssh_keys = [ownerKey];
+          ssh_keys = [ownerProfile.sshKey];
+          inherit domains;
+        };
+        users.gesha_batio = {
+          ssh_keys = [goshoProfile.sshKey];
+          inherit domains;
+        };
+        users.${sashoProfile.name} = {
+          ssh_keys = [sashoProfile.sshKey];
           inherit domains;
         };
       };
@@ -198,6 +208,8 @@ in {
       }
     ];
     networking.hosts.${relayAddress} = [relayHost];
+
+    networking.firewall.allowedTCPPorts = [sshPort];
 
     services.rathole.settings.client.services = {
       syphoria-ssh.local_addr = "127.0.0.1:${toString sshPort}";

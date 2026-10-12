@@ -3,9 +3,7 @@
   ownerProfile,
   ...
 }: let
-  authorizedKeys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAz6cbpujcaBo5eAb4+c30kaD5T9wUXAtv5XS98BNACI simmeon.nv@proton.me"
-  ];
+  authorizedKeys = [ownerProfile.sshKey];
 in {
   flake.nixosModules.ssh = {pkgs, ...}: {
     networking.firewall.allowedTCPPorts = [22];
