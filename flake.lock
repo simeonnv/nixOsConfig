@@ -1718,11 +1718,11 @@
         "systems": "systems_6"
       },
       "locked": {
-        "lastModified": 1791753542,
-        "narHash": "sha256-ii/3foB4LzfaGitZGFhjLmY+t8YhMywPrDDf861SHLw=",
+        "lastModified": 1791911453,
+        "narHash": "sha256-Qhj2Il3sdVLW6HsRzo9lXAi3Blq0QDPRVoe80lPk55E=",
         "ref": "refs/heads/main",
-        "rev": "fe4ba13a5ab4085763c304fb1187460428d77974",
-        "revCount": 11,
+        "rev": "a156925f1c556450ab5749770c942546146aa50c",
+        "revCount": 15,
         "type": "git",
         "url": "https://codeberg.org/simeonnv/syphoria"
       },

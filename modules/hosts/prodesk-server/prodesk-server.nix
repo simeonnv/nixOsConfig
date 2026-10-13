@@ -58,7 +58,7 @@
     };
 
   mkNode = name: cfg: {
-    inherit (cfg) hostname;
+    hostname = name;
     profiles.system = {
       user = "root";
       sshUser = "simeon";
