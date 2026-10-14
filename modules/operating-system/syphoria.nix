@@ -19,6 +19,9 @@
   relayHost = "relay.syphoria.internal";
   relayUser = "syphoria-relay";
 
+  fileQuotaMb = 100;
+  messageLimit = fileQuotaMb * 1000000 * 3 / 2;
+
   gatewayHost = config.flake.deploy.nodes.gateway.hostname;
   gatewayHostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILbNp6vBDs/7HA1mbdvtCUwcwEegSxoLgeZ+cXOllZoy";
   relayPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIct7EjgftogSvc1a7c5qPNUjfbU1/Jwbal8QYvsRSIA syphoria-relay";
@@ -46,7 +49,7 @@ in {
       };
       cloudflare_api_token = {
         inherit sopsFile;
-        restartUnits = ["stalwart.service"];
+        restartUnits = ["stalwart.service" "acme-${hostname}.service"];
       };
       syphoria_relay_ssh_key = {
         inherit sopsFile;
@@ -67,6 +70,7 @@ in {
       settings = {
         inherit domains;
         server.listen = "0.0.0.0:${toString sshPort}";
+        files.quota_mb = fileQuotaMb;
         users.${ownerProfile.name} = {
           ssh_keys = [ownerProfile.sshKey];
           inherit domains;
@@ -88,6 +92,20 @@ in {
         enable = true;
         startAt = "Mon,Wed,Fri 03:00";
         keep = 10;
+      };
+      api = {
+        enable = true;
+        useACMEHost = hostname;
+      };
+    };
+
+    security.acme = {
+      acceptTerms = true;
+      defaults.email = ownerProfile.email;
+      certs.${hostname} = {
+        dnsProvider = "cloudflare";
+        extraDomainNames = lib.remove hostname mailHosts;
+        credentialFiles.CF_DNS_API_TOKEN_FILE = secrets.cloudflare_api_token.path;
       };
     };
 
@@ -255,6 +273,8 @@ in {
         mynetworks = ["127.0.0.0/8"];
         smtpd_relay_restrictions = ["permit_mynetworks" "reject"];
         smtp_tls_security_level = "may";
+        message_size_limit = messageLimit;
+        mailbox_size_limit = messageLimit;
       };
       settings.master.smtp_inet.name = lib.mkForce "127.0.0.1:${toString relayPort}";
     };

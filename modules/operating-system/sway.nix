@@ -225,7 +225,7 @@
         keybindings = lib.mkOptionDefault {
           "${modifier}+q" = "kill";
           "${modifier}+e" = "exec thunar";
-          "${modifier}+b" = "exec firefox";
+          "${modifier}+b" = "exec ${lib.getExe config.programs.firefox.finalPackage}";
           "Mod1+t" = "exec wofi --show drun";
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
