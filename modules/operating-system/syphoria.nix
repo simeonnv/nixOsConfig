@@ -104,6 +104,7 @@ in {
       defaults.email = ownerProfile.email;
       certs.${hostname} = {
         dnsProvider = "cloudflare";
+        dnsResolver = "1.1.1.1:53";
         extraDomainNames = lib.remove hostname mailHosts;
         credentialFiles.CF_DNS_API_TOKEN_FILE = secrets.cloudflare_api_token.path;
       };
