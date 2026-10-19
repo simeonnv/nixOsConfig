@@ -49,6 +49,7 @@
         cachyos-kernel
         obs-studio
         mullvad
+        usbguard
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -131,6 +132,8 @@
     nixpkgs.config.allowUnfree = true;
 
     services.udisks2.enable = true;
+
+    services.usbguard.rules = builtins.readFile ./_usbguard-rules.conf;
 
     services.flatpak.enable = true;
     system.stateVersion = "25.11";
