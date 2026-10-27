@@ -11,7 +11,7 @@
         image = ./../../assets/OneShotRosePine.png;
       };
       light = {
-        scheme = "rose-pine-dawn";
+        scheme = "catppuccin-latte";
         image = ./../../assets/GLTStaircase.png;
       };
     };

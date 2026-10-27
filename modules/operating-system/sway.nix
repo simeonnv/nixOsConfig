@@ -36,6 +36,27 @@
     ...
   }: let
     colors = config.lib.stylix.colors.withHashtag;
+    stylixBar = config.stylix.targets.sway.exportedBarConfig;
+    barButton = background: text: {
+      inherit background text;
+      border = background;
+    };
+    barConfig =
+      stylixBar
+      // {
+        colors =
+          stylixBar.colors
+          // {
+            background = colors.base00;
+            statusline = colors.base05;
+            separator = colors.base03;
+            focusedWorkspace = barButton colors.base0D colors.base00;
+            activeWorkspace = barButton colors.base01 colors.base05;
+            inactiveWorkspace = barButton colors.base01 colors.base05;
+            urgentWorkspace = barButton colors.base08 colors.base00;
+            bindingMode = barButton colors.base08 colors.base00;
+          };
+      };
     # NVIDIA screencopy hands back misaligned-stride buffers that crash pixman
     # in detect mode; drop when https://github.com/moverest/wl-kbptr/pull/71 lands
     wl-kbptr-patched = pkgs.wl-kbptr.overrideAttrs (old: {
@@ -119,6 +140,9 @@
       enable = true;
       general = {
         colors = true;
+        color_good = colors.base0D;
+        color_degraded = colors.base09;
+        color_bad = colors.base08;
         interval = 5;
         output_format = "i3bar";
       };
@@ -283,7 +307,7 @@
               statusCommand = "${i3status-with-brightness}";
               trayOutput = "*";
             }
-            // config.stylix.targets.sway.exportedBarConfig)
+            // barConfig)
         ];
         input = {
           "type:touchpad" = {
