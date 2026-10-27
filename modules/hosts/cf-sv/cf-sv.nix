@@ -44,6 +44,7 @@
         ai-slop
         tlp
         mullvad
+        cachyos-kernel
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -105,6 +106,7 @@
 
     programs.nix-ld.enable = true;
     networking.hostName = "cf-sv";
+    stylixTheme = "light";
     networking.networkmanager.enable = true;
 
     time.timeZone = "Europe/Sofia";

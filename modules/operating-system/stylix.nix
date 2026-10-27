@@ -2,19 +2,37 @@
   flake.nixosModules.stylix = {
     lib,
     pkgs,
+    config,
     ...
-  }: {
-    home-manager.sharedModules = [{home.pointerCursor.enable = true;}];
+  }: let
+    themes = {
+      dark = {
+        scheme = "rose-pine";
+        image = ./../../assets/OneShotRosePine.png;
+      };
+      light = {
+        scheme = "rose-pine-dawn";
+        image = ./../../assets/GLTStaircase.png;
+      };
+    };
+    theme = themes.${config.stylixTheme};
+  in {
+    options.stylixTheme = lib.mkOption {
+      type = lib.types.enum ["dark" "light"];
+      default = "dark";
+    };
 
-    stylix = {
+    config.home-manager.sharedModules = [{home.pointerCursor.enable = true;}];
+
+    config.stylix = {
       enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/${theme.scheme}.yaml";
 
       # image = ./../../assets/blueLain.jpg;
       # image = ./../../assets/inabakumori.png;
       # image = ./../../assets/GLTStaircaseRosePine.png;
-      image = ./../../assets/OneShotRosePine.png;
-      polarity = "dark";
+      image = theme.image;
+      polarity = config.stylixTheme;
 
       targets.grub.enable = false;
 
