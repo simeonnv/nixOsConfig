@@ -278,11 +278,12 @@
           };
         };
         bars = [
-          {
-            position = "top";
-            statusCommand = "${i3status-with-brightness}";
-            trayOutput = "*";
-          }
+          ({
+              position = "top";
+              statusCommand = "${i3status-with-brightness}";
+              trayOutput = "*";
+            }
+            // config.stylix.targets.sway.exportedBarConfig)
         ];
         input = {
           "type:touchpad" = {
