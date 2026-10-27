@@ -45,6 +45,11 @@
 
     nix-claude-code.url = "github:ryoppippi/nix-claude-code";
 
+    nix-atopile = {
+      url = "github:simeonnv/nix-atopile";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixcord.url = "github:4evy/nixcord";
 
     concord.url = "github:chojs23/concord";

@@ -50,6 +50,8 @@
         obs-studio
         mullvad
         usbguard
+        kicad
+        atopile
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

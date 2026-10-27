@@ -11,6 +11,11 @@
       ty
     ];
 
+    xdg.configFile = builtins.listToAttrs (map (q: {
+      name = "helix/runtime/queries/ato/${q}.scm";
+      value.text = "; inherits: python\n";
+    }) ["highlights" "indents" "textobjects"]);
+
     programs.helix = {
       enable = true;
       package = pkgs.helix;
@@ -54,7 +59,24 @@
             # reborrowHints.enable = "always";
           };
         };
+        language-server.ato = {
+          command = "ato";
+          args = ["lsp" "start"];
+        };
         language = [
+          {
+            name = "ato";
+            scope = "source.ato";
+            file-types = ["ato"];
+            roots = ["ato.yaml"];
+            grammar = "python";
+            comment-token = "#";
+            indent = {
+              tab-width = 4;
+              unit = "    ";
+            };
+            language-servers = ["ato"];
+          }
           {
             name = "nix";
             auto-format = true;

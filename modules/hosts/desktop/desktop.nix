@@ -50,6 +50,7 @@
         ai-slop
         cachyos-kernel
         kicad
+        atopile
         openrazer
         obs-studio
         mullvad
