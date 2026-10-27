@@ -11,5 +11,6 @@
     boot.kernelParams = ["nvidia-drm.modeset=1"];
     services.xserver.videoDrivers = ["nvidia"];
     hardware.nvidia.open = false;
+    environment.sessionVariables.WLR_RENDERER = "vulkan";
   };
 }

@@ -12,6 +12,7 @@
 
     home.packages = [
       inputs.concord.packages.${pkgs.stdenv.hostPlatform.system}.default
+      pkgs.mpv
     ];
 
     # stylix would otherwise inject its own generated theme and enable it over system24

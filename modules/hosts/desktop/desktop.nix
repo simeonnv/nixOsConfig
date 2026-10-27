@@ -69,11 +69,35 @@
 
     services.udisks2.enable = true;
 
-    boot.supportedFilesystems = ["ntfs"];
+    boot.supportedFilesystems = ["ntfs" "zfs"];
+    boot.zfs.forceImportRoot = false;
+    boot.extraModprobeConfig = "options zfs zfs_arc_max=8589934592";
+    networking.hostId = "8d285275";
+    services.zfs.autoScrub.enable = true;
+
+    environment.etc.crypttab.text = ''
+      cryptdata /dev/disk/by-id/ata-ST4000VN006-3CW104_WW6BHFF7-part1 /root/cryptdata.key luks,nofail
+    '';
+
+    systemd.services.zfs-import-data = {
+      wants = ["systemd-cryptsetup@cryptdata.service"];
+      after = ["systemd-cryptsetup@cryptdata.service"];
+    };
+
     fileSystems."/mnt/data" = {
-      device = "/dev/disk/by-uuid/DA363EAA363E8791";
-      fsType = "ntfs-3g";
-      options = ["rw" "nofail" "uid=1000" "gid=100" "umask=022" "windows_names"];
+      device = "data/general";
+      fsType = "zfs";
+      options = ["nofail"];
+    };
+    fileSystems."/mnt/data/media" = {
+      device = "data/media";
+      fsType = "zfs";
+      options = ["nofail"];
+    };
+    fileSystems."/mnt/data/archive" = {
+      device = "data/archive";
+      fsType = "zfs";
+      options = ["nofail"];
     };
     fileSystems."/mnt/windows" = {
       device = "/dev/disk/by-uuid/FC6833A968336216";
@@ -130,6 +154,8 @@
 
     environment.systemPackages = [
       pkgs.usbutils
+      pkgs.smartmontools
+      pkgs.gptfdisk
       pkgs.claude-code
       pkgs.nodejs
     ];
