@@ -44,6 +44,10 @@
     barConfig =
       stylixBar
       // {
+        fonts = {
+          names = ["IBM 3270"];
+          size = 11.0;
+        };
         colors =
           stylixBar.colors
           // {

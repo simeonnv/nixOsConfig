@@ -13,6 +13,7 @@
       fira-code-symbols
       dina-font
       proggyfonts
+      _3270font
     ];
   };
 }
