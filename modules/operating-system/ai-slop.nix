@@ -120,7 +120,7 @@
       pname = "pi-extensions";
       version = "0";
       src = ./pi-packages;
-      npmDepsHash = "sha256-zBfaAcA2iH+/zSRoMRY57QCf+oNokbavfakdRsvBU1U=";
+      npmDepsHash = "sha256-L1DzKR06Tl8rGMZIG9euHVoMXwwvADOIyfjzkADnxx4=";
 
       dontNpmBuild = true;
 
@@ -162,11 +162,17 @@
 
       models = piModels;
 
+      environment.FFF_ENABLE_HOME_SCAN.value = "0";
+
       settings =
         {
           defaultProvider = "anthropic";
           defaultModel = "claude-opus-5-5";
           defaultThinkingLevel = "high";
+
+          extensions = ["-builtin:mcp"];
+
+          warnings.anthropicExtraUsage = false;
 
           packages = map piPackage [
             "@bytetrue/pi-web-search"

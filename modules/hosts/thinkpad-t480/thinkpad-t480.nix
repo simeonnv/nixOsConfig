@@ -47,6 +47,7 @@
         ai-slop
         tlp
         cachyos-kernel
+        memory
         obs-studio
         mullvad
         usbguard

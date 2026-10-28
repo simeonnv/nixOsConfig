@@ -11,6 +11,6 @@
     "pi-lens": "^4.1.6",
     "pi-mcp-adapter": "^2.34.0",
     "pi-mono-clear": "^1.7.3",
-    "pi-typesafe": "^0.6.1"
+    "pi-typesafe": "^0.13.1"
   }
 }

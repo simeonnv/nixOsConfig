@@ -68,6 +68,10 @@
     });
     # i3status has no backlight module; inject a brightness block into its
     # i3bar JSON stream, right after the volume block
+    run-scoped = pkgs.writeShellScript "run-scoped" ''
+      exec ${pkgs.systemd}/bin/systemd-run --user --scope --slice=app.slice --collect --quiet \
+        --unit="app-sway-$(${pkgs.systemd}/bin/systemd-escape "''${1##*/}")-$$" -- "$@"
+    '';
     i3status-with-brightness = pkgs.writeShellScript "i3status-with-brightness" ''
       ${pkgs.i3status}/bin/i3status | {
         read -r header && printf '%s\n' "$header"
@@ -238,7 +242,7 @@
       ];
       config = rec {
         modifier = "Mod4";
-        terminal = "kitty";
+        terminal = "${run-scoped} kitty";
         gaps = {
           inner = 5;
           outer = 5;
@@ -252,9 +256,9 @@
         ];
         keybindings = lib.mkOptionDefault {
           "${modifier}+q" = "kill";
-          "${modifier}+e" = "exec thunar";
-          "${modifier}+b" = "exec ${lib.getExe config.programs.firefox.finalPackage}";
-          "Mod1+t" = "exec wofi --show drun";
+          "${modifier}+e" = "exec ${run-scoped} thunar";
+          "${modifier}+b" = "exec ${run-scoped} ${lib.getExe config.programs.firefox.finalPackage}";
+          "Mod1+t" = "exec ${run-scoped} wofi --show drun";
           "${modifier}+Shift+r" = "reload";
           "${modifier}+f" = "fullscreen toggle";
 
