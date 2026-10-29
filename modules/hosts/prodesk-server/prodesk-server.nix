@@ -43,6 +43,7 @@
           rathole-client
           mullvad
           syphoria
+          forgejo
         ]
         ++ [
           inputs.home-manager.nixosModules.home-manager

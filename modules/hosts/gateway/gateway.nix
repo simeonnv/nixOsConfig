@@ -30,6 +30,7 @@
         rathole-server
         gateway-ssh-tunnels
         syphoria-gateway
+        forgejo-gateway
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
