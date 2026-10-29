@@ -106,6 +106,9 @@ in {
   }: let
     mullvadCli = "${config.services.mullvad-vpn.package}/bin/mullvad";
   in {
+    services.mullvad-vpn.enableEarlyBootBlocking = lib.mkForce false;
+    systemd.services.mullvad-auto-connect.enable = false;
+
     systemd.services.mullvad-lan-allow = {
       after = ["mullvad-daemon.service"];
       requires = ["mullvad-daemon.service"];
