@@ -5,7 +5,9 @@
 
   inputs.self.submodules = true;
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-timed.url = "github:simeonnv/nixpkgs-timed";
+    nixpkgs.follows = "nixpkgs-timed/nixpkgs-14d";
+
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-multiverse.url = "github:fzakaria/nixpkgs-multiverse";
 
