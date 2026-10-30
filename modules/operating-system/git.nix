@@ -21,9 +21,11 @@
     programs = {
       git = {
         enable = true;
-        userName = "simeon";
-        userEmail = "simmeon.nv@proton.me";
-        extraConfig.pull.rebase = false;
+        settings = {
+          user.name = "simeon";
+          user.email = "simmeon.nv@proton.me";
+          pull.rebase = false;
+        };
       };
       gh = {
         enable = true;

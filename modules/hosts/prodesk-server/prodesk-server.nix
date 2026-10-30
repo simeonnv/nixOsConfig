@@ -82,19 +82,19 @@ in {
     programs.ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks =
+      settings =
         {
           gateway = {
-            hostname = gatewayHost;
-            user = ownerProfile.name;
+            HostName = gatewayHost;
+            User = ownerProfile.name;
           };
         }
         // lib.mapAttrs (name: cfg: {
-          hostname = "127.0.0.1";
-          port = cfg.sshTunnelPort;
-          user = ownerProfile.name;
-          proxyJump = "gateway";
-          extraOptions.HostKeyAlias = name;
+          HostName = "127.0.0.1";
+          Port = cfg.sshTunnelPort;
+          User = ownerProfile.name;
+          ProxyJump = "gateway";
+          HostKeyAlias = name;
         })
         prodesks;
     };
