@@ -91,11 +91,16 @@
       };
     };
 
+    abliterationApiKey = pkgs.writeShellScript "abliteration-api-key" ''
+      export SOPS_AGE_KEY_CMD="${pkgs.ssh-to-age}/bin/ssh-to-age -private-key -i $HOME/.ssh/id_ed25519"
+      exec ${pkgs.sops}/bin/sops decrypt --extract '["abliteration-api-key"]' ${self + /secrets/ai.yaml}
+    '';
+
     piModels = (pkgs.formats.json {}).generate "pi-models.json" {
       providers.abliteration = {
         baseUrl = "https://api.abliteration.ai/v1";
         api = "openai-completions";
-        apiKey = "!SOPS_AGE_KEY_CMD=\"${pkgs.ssh-to-age}/bin/ssh-to-age -private-key -i $HOME/.ssh/id_ed25519\" ${pkgs.sops}/bin/sops decrypt --extract '[\"abliteration-api-key\"]' ${self + /secrets/ai.yaml}";
+        apiKey = "!/etc/pi/abliteration-api-key";
         models = [
           {
             id = "abliterated-model-large-v2";
@@ -146,6 +151,8 @@
     environment.systemPackages = [
       pkgs.claude-code
     ];
+
+    environment.etc."pi/abliteration-api-key".source = abliterationApiKey;
 
     programs.pi.coding-agent = {
       enable = true;

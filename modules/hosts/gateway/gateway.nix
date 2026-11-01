@@ -31,6 +31,8 @@
         gateway-ssh-tunnels
         syphoria-gateway
         forgejo-gateway
+        jellyfin-gateway
+        arr-gateway
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager

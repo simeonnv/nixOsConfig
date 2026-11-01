@@ -35,6 +35,7 @@
         update = "sudo nixos-rebuild switch --flake .";
         gs = "git status";
         gl = "git log --oneline --graph";
+        history = "history 1";
         cc = "claude --model fable --effort high --dangerously-skip-permissions --max-turns 20";
       };
 

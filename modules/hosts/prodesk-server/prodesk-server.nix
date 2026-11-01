@@ -41,9 +41,10 @@
           deploy-target
           firefox-syncserver
           rathole-client
-          mullvad
           syphoria
           forgejo
+          jellyfin
+          arr
         ]
         ++ [
           inputs.home-manager.nixosModules.home-manager
@@ -96,45 +97,22 @@ in {
           ProxyJump = "gateway";
           HostKeyAlias = name;
         })
-        prodesks;
+        prodesks
+        // {
+          media-admin = {
+            HostName = "127.0.0.1";
+            Port = prodesks.prodesk-server.sshTunnelPort;
+            User = ownerProfile.name;
+            ProxyJump = "gateway";
+            HostKeyAlias = "prodesk-server";
+            SessionType = "none";
+            LocalForward = map (port: "${toString port} localhost:${toString port}") [8081 8989 7878 9696 6767];
+          };
+        };
     };
   };
 
   flake.nixosModules.prodesk-server = {
-    pkgs,
-    config,
-    ...
-  }: let
-    mullvadCli = "${config.services.mullvad-vpn.package}/bin/mullvad";
-  in {
-    services.mullvad-vpn.enableEarlyBootBlocking = lib.mkForce false;
-    systemd.services.mullvad-auto-connect.enable = false;
-
-    systemd.services.mullvad-lan-allow = {
-      after = ["mullvad-daemon.service"];
-      requires = ["mullvad-daemon.service"];
-      wantedBy = ["multi-user.target"];
-      path = [pkgs.coreutils];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
-      script = ''
-        for _ in $(seq 1 60); do
-          ${mullvadCli} status >/dev/null 2>&1 && break
-          sleep 1
-        done
-        ${mullvadCli} lan set allow
-        ${mullvadCli} auto-connect set off
-      '';
-    };
-
-    systemd.services.rathole = {
-      after = ["mullvad-daemon.service"];
-      wants = ["mullvad-daemon.service"];
-      serviceConfig.ExecStartPost = "-+${mullvadCli} split-tunnel add $MAINPID";
-    };
-
     nix.settings.experimental-features = ["nix-command" "flakes"];
     hardware.enableAllFirmware = true;
     hardware.cpu.amd.updateMicrocode = true;
