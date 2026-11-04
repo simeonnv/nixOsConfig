@@ -70,6 +70,7 @@ in {
       settings = {
         inherit domains;
         server.listen = "0.0.0.0:${toString sshPort}";
+        server.hostname = hostname;
         files.quota_mb = fileQuotaMb;
         users.${ownerProfile.name} = {
           ssh_keys = [ownerProfile.sshKey];
