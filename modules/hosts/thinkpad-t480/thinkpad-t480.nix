@@ -173,6 +173,7 @@
         zellij
         direnv
         cluster-ssh
+        battery
       ];
     };
 
