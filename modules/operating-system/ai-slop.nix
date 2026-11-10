@@ -96,7 +96,11 @@
       exec ${pkgs.sops}/bin/sops decrypt --extract '["abliteration-api-key"]' ${self + /secrets/ai.yaml}
     '';
 
+    claudeCodeVersion = "2.1.290";
+
     piModels = (pkgs.formats.json {}).generate "pi-models.json" {
+      providers.anthropic.headers."user-agent" = "claude-cli/${claudeCodeVersion}";
+
       providers.abliteration = {
         baseUrl = "https://api.abliteration.ai/v1";
         api = "openai-completions";
@@ -170,7 +174,7 @@
       models = piModels;
 
       environment.FFF_ENABLE_HOME_SCAN.value = "0";
-      environment.PI_ANTHROPIC_AUTH_CLAUDE_CODE_VERSION.value = "2.1.290";
+      environment.PI_ANTHROPIC_AUTH_CLAUDE_CODE_VERSION.value = claudeCodeVersion;
 
       settings =
         {
