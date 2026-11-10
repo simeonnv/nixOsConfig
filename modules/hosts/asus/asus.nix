@@ -28,6 +28,7 @@
         hacking
         qbittorrent
         manix
+        addlicense
         libreoffice
         viber
         inkscape
