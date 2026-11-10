@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {...}: {
   flake.nixosModules.addlicense = {pkgs, ...}: let
     license-sign = pkgs.writeShellApplication {

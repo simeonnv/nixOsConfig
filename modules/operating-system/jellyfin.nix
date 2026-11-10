@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {ownerProfile, ...}: let
   domain = "jellyfin.fravs.org";
   httpPort = 8096;

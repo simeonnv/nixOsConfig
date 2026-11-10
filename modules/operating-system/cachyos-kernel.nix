@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {inputs, ...}: {
   flake.nixosModules.cachyos-kernel = {pkgs, ...}: let
     kernel = pkgs.cachyosKernels.linux-cachyos-latest.override {

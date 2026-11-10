@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 let
   domain = "git.fravs.org";
   httpPort = 3000;

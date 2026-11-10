@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {inputs, ...}: {
   flake.nixosModules.pkgs-stable = {pkgs, ...}: let
     pkgs-stable = import inputs.nixpkgs-stable {

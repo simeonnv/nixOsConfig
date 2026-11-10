@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {inputs, ...}: {
   flake.nixosModules.pkgs-multiverse = {pkgs, ...}: let
     pkgs-multiverse = inputs.nixpkgs-multiverse.lib.mkMultiverse {

@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {
   flake.homeModules.helix = {pkgs, ...}: {
     home.packages = with pkgs; [

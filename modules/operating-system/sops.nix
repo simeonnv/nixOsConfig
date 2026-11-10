@@ -1,3 +1,6 @@
+# Copyright 2026 Simeon Vangelov
+# SPDX-License-Identifier: MIT
+
 {inputs, ...}: {
   flake.nixosModules.sops = {pkgs, ...}: {
     imports = [inputs.sops-nix.nixosModules.sops];
