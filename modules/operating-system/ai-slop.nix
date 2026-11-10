@@ -170,6 +170,7 @@
       models = piModels;
 
       environment.FFF_ENABLE_HOME_SCAN.value = "0";
+      environment.PI_ANTHROPIC_AUTH_CLAUDE_CODE_VERSION.value = "2.1.290";
 
       settings =
         {
