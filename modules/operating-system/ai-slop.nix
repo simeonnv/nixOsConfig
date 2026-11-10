@@ -125,7 +125,7 @@
       pname = "pi-extensions";
       version = "0";
       src = ./pi-packages;
-      npmDepsHash = "sha256-L1DzKR06Tl8rGMZIG9euHVoMXwwvADOIyfjzkADnxx4=";
+      npmDepsHash = "sha256-q2DHTu5oyvFw/uf3zdiI5QgzTIDUDv7PoIU0WiKpQaI=";
 
       dontNpmBuild = true;
 
@@ -174,7 +174,7 @@
       settings =
         {
           defaultProvider = "anthropic";
-          defaultModel = "claude-opus-5-5";
+          defaultModel = "claude-fable-5-2";
           defaultThinkingLevel = "high";
 
           extensions = ["-builtin:mcp"];

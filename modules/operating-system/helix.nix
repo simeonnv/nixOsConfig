@@ -9,6 +9,7 @@
       taplo
       yazi
       ty
+      harper
     ];
 
     xdg.configFile = builtins.listToAttrs (map (q: {
@@ -59,6 +60,11 @@
             # reborrowHints.enable = "always";
           };
         };
+        language-server.harper-ls = {
+          command = "harper-ls";
+          args = ["--stdio"];
+          config.harper-ls.dialect = "British";
+        };
         language-server.ato = {
           command = "ato";
           args = ["lsp" "start"];
@@ -76,6 +82,21 @@
               unit = "    ";
             };
             language-servers = ["ato"];
+          }
+          {
+            name = "markdown";
+            language-servers = ["marksman" "markdown-oxide" "harper-ls"];
+          }
+          {
+            name = "git-commit";
+            language-servers = ["harper-ls"];
+          }
+          {
+            name = "text";
+            scope = "text.plain";
+            file-types = ["txt"];
+            roots = [];
+            language-servers = ["harper-ls"];
           }
           {
             name = "nix";

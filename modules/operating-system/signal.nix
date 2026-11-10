@@ -1,7 +1,7 @@
 {
-  flake.nixosModules.signal = {pkgs-multiverse, ...}: {
+  flake.nixosModules.signal = {pkgs, ...}: {
     environment.systemPackages = [
-      (pkgs-multiverse.version "signal-desktop" "8.25.0")
+      pkgs.signal-desktop
     ];
   };
 }

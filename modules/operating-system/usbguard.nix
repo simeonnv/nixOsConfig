@@ -25,14 +25,13 @@
 
     security.polkit.enable = true;
 
-    systemd.user.services.hyprpolkitagent = {
-      description = "Hyprland Polkit Authentication Agent";
+    systemd.user.services.polkit-gnome-agent = {
+      description = "Polkit GNOME Authentication Agent";
       partOf = ["graphical-session.target"];
       after = ["graphical-session.target"];
       wantedBy = ["graphical-session.target"];
-      unitConfig.ConditionEnvironment = "WAYLAND_DISPLAY";
       serviceConfig = {
-        ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
         Slice = "session.slice";
         Restart = "on-failure";
         TimeoutStopSec = "5sec";
@@ -42,8 +41,8 @@
     systemd.user.services.usbguard-prompt = {
       description = "Ask for authentication before allowing blocked USB devices";
       partOf = ["graphical-session.target"];
-      after = ["graphical-session.target" "hyprpolkitagent.service"];
-      wants = ["hyprpolkitagent.service"];
+      after = ["graphical-session.target" "polkit-gnome-agent.service"];
+      wants = ["polkit-gnome-agent.service"];
       wantedBy = ["graphical-session.target"];
       environment.GI_TYPELIB_PATH = lib.makeSearchPath "lib/girepository-1.0" [pkgs.glib.out];
       serviceConfig = {
