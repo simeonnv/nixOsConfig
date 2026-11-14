@@ -55,7 +55,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    metrolist.url = "github:MetrolistGroup/Metrolist";
+    metrolist = {
+      url = "github:MetrolistGroup/Metrolist";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixcord.url = "github:4evy/nixcord";
 
