@@ -6,5 +6,7 @@
     environment.systemPackages = [
       inputs.metrolist.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
+
+    services.gnome.gnome-keyring.enable = true;
   };
 }
