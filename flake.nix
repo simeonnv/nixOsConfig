@@ -55,6 +55,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    metrolist.url = "github:MetrolistGroup/Metrolist";
+
     nixcord.url = "github:4evy/nixcord";
 
     concord.url = "github:chojs23/concord";

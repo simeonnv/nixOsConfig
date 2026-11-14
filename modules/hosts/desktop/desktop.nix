@@ -1,6 +1,5 @@
 # Copyright 2026 Simeon Vangelov
 # SPDX-License-Identifier: MIT
-
 {
   inputs,
   self,
@@ -58,6 +57,7 @@
         openrazer
         obs-studio
         mullvad
+        metrolist
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -74,36 +74,9 @@
 
     services.udisks2.enable = true;
 
-    boot.supportedFilesystems = ["ntfs" "zfs"];
-    boot.zfs.forceImportRoot = false;
-    boot.extraModprobeConfig = "options zfs zfs_arc_max=8589934592";
+    boot.supportedFilesystems = ["ntfs"];
     networking.hostId = "8d285275";
-    services.zfs.autoScrub.enable = true;
 
-    environment.etc.crypttab.text = ''
-      cryptdata /dev/disk/by-id/ata-ST4000VN006-3CW104_WW6BHFF7-part1 /root/cryptdata.key luks,nofail
-    '';
-
-    systemd.services.zfs-import-data = {
-      wants = ["systemd-cryptsetup@cryptdata.service"];
-      after = ["systemd-cryptsetup@cryptdata.service"];
-    };
-
-    fileSystems."/mnt/data" = {
-      device = "data/general";
-      fsType = "zfs";
-      options = ["nofail"];
-    };
-    fileSystems."/mnt/data/media" = {
-      device = "data/media";
-      fsType = "zfs";
-      options = ["nofail"];
-    };
-    fileSystems."/mnt/data/archive" = {
-      device = "data/archive";
-      fsType = "zfs";
-      options = ["nofail"];
-    };
     fileSystems."/mnt/windows" = {
       device = "/dev/disk/by-uuid/FC6833A968336216";
       fsType = "ntfs-3g";

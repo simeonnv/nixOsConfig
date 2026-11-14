@@ -57,6 +57,7 @@
         usbguard
         kicad
         atopile
+        metrolist
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
