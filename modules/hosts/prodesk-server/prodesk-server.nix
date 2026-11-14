@@ -164,8 +164,10 @@ in {
       wantedBy = ["multi-user.target"];
       serviceConfig.Type = "oneshot";
       script = ''
-        attr="/sys/class/firmware-attributes/hp-bioscfg/attributes/After Power Loss/current_value"
+        base="/sys/class/firmware-attributes/hp-bioscfg"
+        attr="$base/attributes/After Power Loss/current_value"
         if [ -e "$attr" ] && [ "$(cat "$attr")" != "Power On" ]; then
+          echo "placeholder" > "$base/authentication/Setup Password/current_password"
           echo "Power On" > "$attr"
         fi
       '';
