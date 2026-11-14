@@ -160,6 +160,17 @@ in {
     systemd.targets.hibernate.enable = false;
     systemd.targets.hybrid-sleep.enable = false;
 
+    systemd.services.bios-power-on-after-loss = {
+      wantedBy = ["multi-user.target"];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        attr="/sys/class/firmware-attributes/hp-bioscfg/attributes/After Power Loss/current_value"
+        if [ -e "$attr" ] && [ "$(cat "$attr")" != "Power On" ]; then
+          echo "Power On" > "$attr"
+        fi
+      '';
+    };
+
     networking.hostName = lib.mkDefault "prodesk-server";
     networking.networkmanager.enable = true;
 
