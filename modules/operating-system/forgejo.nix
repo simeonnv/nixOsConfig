@@ -1,6 +1,5 @@
 # Copyright 2026 Simeon Vangelov
 # SPDX-License-Identifier: MIT
-
 let
   domain = "git.fravs.org";
   httpPort = 3000;
@@ -9,6 +8,7 @@ in {
   flake.nixosModules.forgejo = {
     config,
     pkgs,
+    pkgs-multiverse,
     ...
   }: let
     cfg = config.services.forgejo;
@@ -21,6 +21,7 @@ in {
 
     services.forgejo = {
       enable = true;
+      package = pkgs-multiverse.version "forgejo" "17.0.1";
       database.type = "sqlite3";
       lfs.enable = true;
       settings = {
@@ -55,7 +56,7 @@ in {
 
     services.anubis.instances.forgejo = {
       settings.TARGET = "http://127.0.0.1:${toString httpPort}";
-      settings.DIFFICULTY = 6;
+      settings.DIFFICULTY = 5;
       policy.extraBots = [
         {import = "(data)/clients/git.yaml";}
         {import = "(data)/apps/gitea-rss-feeds.yaml";}
@@ -72,7 +73,7 @@ in {
             action = "CHALLENGE";
             challenge = {
               algorithm = "fast";
-              difficulty = 6;
+              difficulty = 5;
             };
           }
         ];
