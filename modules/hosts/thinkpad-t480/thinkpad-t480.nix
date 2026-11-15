@@ -180,6 +180,7 @@
         direnv
         cluster-ssh
         battery
+        yt-dlp
       ];
     };
 

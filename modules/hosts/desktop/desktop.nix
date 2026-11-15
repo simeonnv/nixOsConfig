@@ -107,6 +107,7 @@
         zellij
         direnv
         cluster-ssh
+        yt-dlp
       ];
     };
 
