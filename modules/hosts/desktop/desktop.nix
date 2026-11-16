@@ -58,6 +58,8 @@
         obs-studio
         mullvad
         metrolist
+        ssh
+        rathole-client
       ]
       ++ [
         inputs.home-manager.nixosModules.home-manager
@@ -128,6 +130,12 @@
     # environment.systemPackages = [
     #   pkgs.cmst
     # ];
+
+    services.rathole.settings.client = {
+      remote_addr = "51.195.40.164:2333";
+      transport.noise.remote_public_key = "y21qMm2k9/9gC60ZX5sgeNpUpL/oKUEdjaRY39GiSDs=";
+      services.ssh-desktop.local_addr = "127.0.0.1:22";
+    };
 
     time.timeZone = "Europe/Sofia";
 

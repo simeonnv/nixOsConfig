@@ -20,6 +20,8 @@
     # };
   };
 
+  sshTunnels = lib.mapAttrs (_: cfg: cfg.sshTunnelPort) prodesks // {desktop = 2202;};
+
   gatewayHost = config.flake.deploy.nodes.gateway.hostname;
 
   mkProdesk = name: cfg:
@@ -75,11 +77,11 @@ in {
   flake.deploy.nodes = lib.mapAttrs mkNode prodesks;
 
   flake.nixosModules.gateway-ssh-tunnels = {
-    services.rathole.settings.server.services = lib.mapAttrs' (name: cfg:
+    services.rathole.settings.server.services = lib.mapAttrs' (name: port:
       lib.nameValuePair "ssh-${name}" {
-        bind_addr = "127.0.0.1:${toString cfg.sshTunnelPort}";
+        bind_addr = "127.0.0.1:${toString port}";
       })
-    prodesks;
+    sshTunnels;
   };
 
   flake.homeModules.cluster-ssh = {
@@ -93,14 +95,14 @@ in {
             User = ownerProfile.name;
           };
         }
-        // lib.mapAttrs (name: cfg: {
+        // lib.mapAttrs (name: port: {
           HostName = "127.0.0.1";
-          Port = cfg.sshTunnelPort;
+          Port = port;
           User = ownerProfile.name;
           ProxyJump = "gateway";
           HostKeyAlias = name;
         })
-        prodesks
+        sshTunnels
         // {
           media-admin = {
             HostName = "127.0.0.1";

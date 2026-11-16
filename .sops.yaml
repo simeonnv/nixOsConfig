@@ -4,6 +4,7 @@ keys:
   # host keys, derived from /etc/ssh/ssh_host_ed25519_key.pub via ssh-to-age
   - &gateway age1qrp4a7vj7rruz24k6wys4xhhmx7tt5d46ssgam6tfq8dr6d2apfs2r82x0
   - &prodesk-server age134ld5dwpszxl85jwyx64w5tl3u3ndljpplaelhpm5x7gxw973yeqstcrsh
+  - &desktop age1l3lh5usphh8wnhnjcw2gyk02vsswkq3xqrdctp3t80q4w4yftplsewnr4a
 
 creation_rules:
   - path_regex: secrets/.*
@@ -12,3 +13,4 @@ creation_rules:
           - *simeon
           - *gateway
           - *prodesk-server
+          - *desktop
