@@ -2,15 +2,14 @@
   "name": "pi-extensions",
   "private": true,
   "dependencies": {
-    "@aliou/pi-processes": "^0.12.0",
-    "@bytetrue/pi-web-search": "^0.4.0",
-    "@ff-labs/pi-fff": "^0.10.6",
-    "@gotgenes/pi-anthropic-auth": "^3.4.4",
-    "@narumitw/pi-lsp": "^0.49.7",
-    "@sreetej510/pi-usage": "^0.10.0",
-    "pi-lens": "^4.1.6",
-    "pi-mcp-adapter": "^2.34.0",
-    "pi-mono-clear": "^1.7.3",
-    "pi-typesafe": "^0.13.1"
+    "@aliou/pi-processes": "^0.13.6",
+    "@bytetrue/pi-web-search": "^0.6.1",
+    "@ff-labs/pi-fff": "^0.11.0",
+    "@gotgenes/pi-anthropic-auth": "^3.6.0",
+    "@narumitw/pi-lsp": "^0.49.12",
+    "@sreetej510/pi-usage": "^0.14.4",
+    "pi-lens": "^4.5.0",
+    "pi-mcp-adapter": "^7.0.1",
+    "pi-mono-clear": "^1.7.3"
   }
 }
