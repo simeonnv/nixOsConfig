@@ -16,6 +16,8 @@
         pkgs-multiverse
         thinkpad-t480
         sway
+        niri
+        power-auth
         greeter
         git
         fastfetch
@@ -157,8 +159,9 @@
       home.homeDirectory = "/home/${ownerProfile.name}";
       home.stateVersion = "25.11";
       services.udiskie.enable = true;
+      wm.input.touchpad.tap = false;
+      wm.outputs."eDP-1".refresh = "60.010";
       wayland.windowManager.sway = {
-        config.input."type:touchpad".tap = lib.mkForce "disabled";
         extraConfig = ''
           bindgesture pinch:inward nop
           bindgesture pinch:outward nop
@@ -166,6 +169,7 @@
       };
       imports = with self.homeModules; [
         sway
+        niri
         discord
         helix
         firefox

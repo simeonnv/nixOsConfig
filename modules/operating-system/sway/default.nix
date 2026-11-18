@@ -1,8 +1,14 @@
 # Copyright 2026 Simeon Vangelov
 # SPDX-License-Identifier: MIT
 
-{pkgs, ...}: {
-  flake.nixosModules.sway = {pkgs, ...}: {
+{self, ...}: let
+  swayVersion = "1.12";
+in {
+  flake.nixosModules.sway = {
+    pkgs,
+    pkgs-multiverse,
+    ...
+  }: {
     security.polkit.enable = true;
 
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
@@ -18,6 +24,7 @@
 
     programs.sway = {
       enable = true;
+      package = pkgs-multiverse.version "sway" swayVersion;
       xwayland.enable = true;
       extraOptions = [
         "--unsupported-gpu"
@@ -34,10 +41,14 @@
 
   flake.homeModules.sway = {
     pkgs,
+    pkgs-multiverse,
     lib,
     config,
     ...
   }: let
+    cfg = config.wm;
+    swayCfg = config.wayland.windowManager.sway;
+    swaymsg = "${swayCfg.package}/bin/swaymsg";
     colors = config.lib.stylix.colors.withHashtag;
     stylixBar = config.stylix.targets.sway.exportedBarConfig;
     barButton = background: text: {
@@ -64,11 +75,7 @@
             bindingMode = barButton colors.base08 colors.base00;
           };
       };
-    # NVIDIA screencopy hands back misaligned-stride buffers that crash pixman
-    # in detect mode; drop when https://github.com/moverest/wl-kbptr/pull/71 lands
-    wl-kbptr-patched = pkgs.wl-kbptr.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [./wl-kbptr-pr71-pixman-stride.patch];
-    });
+    wl-kbptr = "${cfg.wlKbptr}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect";
     # i3status has no backlight module; inject a brightness block into its
     # i3bar JSON stream, right after the volume block
     run-scoped = pkgs.writeShellScript "run-scoped" ''
@@ -93,7 +100,87 @@
         done
       }
     '';
+
+    enabledBinds = lib.filterAttrs (_: b: b.enable) cfg.keybinds;
+
+    exec = name: cmd: "exec ${pkgs.writeShellScript "sway-${name}" cmd}";
+
+    swayAction = name: arg:
+      {
+        close-window = "kill";
+        force-kill = exec "force-kill" "${swaymsg} -t get_tree | ${pkgs.jq}/bin/jq '.. | select(.focused? == true) | select(.pid != null) | .pid' | xargs kill -9";
+        fullscreen = "fullscreen toggle";
+        toggle-floating = "floating toggle";
+        reload-config = "reload";
+        exit = "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' '${swaymsg} exit'";
+        focus-left = "focus left";
+        focus-right = "focus right";
+        focus-up = "focus up";
+        focus-down = "focus down";
+        move-left = "move left";
+        move-right = "move right";
+        move-up = "move up";
+        move-down = "move down";
+        grow-width = "resize grow width 10 px";
+        shrink-width = "resize shrink width 10 px";
+        grow-height = "resize grow height 10 px";
+        shrink-height = "resize shrink height 10 px";
+        focus-workspace = "workspace number ${toString arg}";
+        move-to-workspace = "move container to workspace number ${toString arg}";
+        launcher = "exec ${run-scoped} wofi --show drun";
+        clipboard = exec "clipboard" "${pkgs.cliphist}/bin/cliphist list | wofi --dmenu | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy";
+        screenshot = exec "screenshot" ''grim -g "$(slurp)" - | swappy -f -'';
+        lock = "exec swaylock -f -c 000000";
+        show-keybinds = exec "show-keybinds" "wofi --dmenu -p Keybinds < ${cfg.keybindsHelp}";
+        pointer-hint = exec "pointer-hint" "${wl-kbptr}; ${swaymsg} mode mouse";
+        brightness-up = "exec brightnessctl set +5%";
+        brightness-down = "exec brightnessctl set 5%-";
+        volume-up = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+        volume-down = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+        volume-mute = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        media-toggle = "exec ${lib.getExe pkgs.playerctl} play-pause";
+        media-next = "exec ${lib.getExe pkgs.playerctl} next";
+        media-previous = "exec ${lib.getExe pkgs.playerctl} previous";
+        dnd-toggle = exec "dnd-toggle" ''
+          ${pkgs.mako}/bin/makoctl mode -t do-not-disturb
+          if ${pkgs.mako}/bin/makoctl mode | grep -q do-not-disturb; then
+            ${pkgs.libnotify}/bin/notify-send -a dnd-toggle -t 2000 "Notifications off"
+          else
+            ${pkgs.libnotify}/bin/notify-send -a dnd-toggle -t 2000 "Notifications on"
+          fi
+        '';
+      }
+      .${name};
+
+    swayCommand = key: b:
+      if b.sway != null
+      then b.sway
+      else if b.action != null
+      then swayAction b.action b.arg
+      else if b.launch != null
+      then "exec ${run-scoped} ${b.launch}"
+      else if b.exec != null
+      then exec (lib.strings.sanitizeDerivationName key) b.exec
+      else null;
+
+    swayKey = key:
+      lib.optionalString (enabledBinds.${key}.allowWhenLocked) "--locked "
+      + lib.concatMapStringsSep "+" (k:
+        {
+          Mod = swayCfg.config.modifier;
+          Alt = "Mod1";
+          Ctrl = "Control";
+        }
+        .${k}
+        or k) (lib.splitString "+" key);
+
+    onOff = b:
+      if b
+      then "enabled"
+      else "disabled";
   in {
+    imports = [self.homeModules.wm-common];
+
     home.packages = with pkgs; [
       wofi
       cliphist
@@ -107,7 +194,6 @@
       slurp
       swappy
 
-      wl-kbptr-patched
       wlrctl
 
       libappindicator-gtk3
@@ -117,17 +203,6 @@
 
       jq
     ];
-
-    xdg.configFile."wl-kbptr/config".text = ''
-      [mode_floating]
-      source=detect
-      label_color=${colors.base05}
-      label_select_color=${colors.base09}
-      selectable_bg_color=${colors.base00}cc
-      selectable_border_color=${colors.base0D}
-      unselectable_bg_color=${colors.base00}80
-      label_font_size=16 60% 120
-    '';
 
     xdg.configFile."swappy/config".text = ''
       [Default]
@@ -204,6 +279,7 @@
 
     services.swayidle = {
       enable = true;
+      systemdTargets = ["sway-session.target"];
       events = {
         before-sleep = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
         lock = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
@@ -215,8 +291,8 @@
         }
         {
           timeout = 600;
-          command = "${pkgs.sway}/bin/swaymsg 'output * power off'";
-          resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * power on'";
+          command = "${swaymsg} 'output * power off'";
+          resumeCommand = "${swaymsg} 'output * power on'";
         }
       ];
     };
@@ -239,58 +315,33 @@
 
     wayland.windowManager.sway = {
       enable = true;
+      package = (pkgs-multiverse.version "sway" swayVersion).override {
+        inherit (swayCfg) extraOptions extraSessionCommands;
+        withBaseWrapper = swayCfg.wrapperFeatures.base;
+        withGtkWrapper = swayCfg.wrapperFeatures.gtk;
+      };
       wrapperFeatures.gtk = true;
       extraOptions = [
         "--unsupported-gpu"
       ];
-      config = rec {
+      config = {
         modifier = "Mod4";
         terminal = "${run-scoped} kitty";
         gaps = {
-          inner = 5;
-          outer = 5;
+          inherit (cfg.gaps) inner outer;
           smartGaps = true;
           smartBorders = "on";
         };
-        startup = [
-          {command = "nm-applet";}
-          {command = "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store";}
-          {command = "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store";}
-        ];
-        keybindings = lib.mkOptionDefault {
-          "${modifier}+q" = "kill";
-          "${modifier}+e" = "exec ${run-scoped} thunar";
-          "${modifier}+b" = "exec ${run-scoped} ${lib.getExe config.programs.firefox.finalPackage}";
-          "Mod1+t" = "exec ${run-scoped} wofi --show drun";
-          "${modifier}+Shift+r" = "reload";
-          "${modifier}+f" = "fullscreen toggle";
-
-          "${modifier}+Shift+s" = "exec grim -g \"$(slurp)\" - | swappy -f -";
-
-          "${modifier}+space" = "floating toggle";
-
-          "${modifier}+v" = "exec ${pkgs.cliphist}/bin/cliphist list | wofi --dmenu | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy";
-
-          "${modifier}+l" = "exec swaylock -f -c 000000";
-
-          "${modifier}+h" = "exec swaymsg -t get_config | ${pkgs.jq}/bin/jq -r '.config' | grep -E '^[[:space:]]*bindsym' | sed -E 's/^[[:space:]]*bindsym //' | wofi --dmenu -p 'Keybinds'";
-
-          "${modifier}+apostrophe" = "exec '${wl-kbptr-patched}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
-          "${modifier}+Shift+apostrophe" = "mode \"mouse\"";
-
-          "${modifier}+Shift+q" = "exec swaymsg -t get_tree | ${pkgs.jq}/bin/jq '.. | select(.focused? == true) | select(.pid != null) | .pid' | xargs kill -9";
-
-          "XF86MonBrightnessUp" = "exec 'brightnessctl set +5%'";
-          "XF86MonBrightnessDown" = "exec 'brightnessctl set 5%-'";
-          "${modifier}+bracketright" = "exec 'brightnessctl set +5%'";
-          "${modifier}+bracketleft" = "exec 'brightnessctl set 5%-'";
-
-          "${modifier}+equal" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          "${modifier}+minus" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
-          "${modifier}+m" = "exec pactl set-sink-mute @DEFAULT_SINK@ toggle";
-
-          "${modifier}+n" = "exec '${pkgs.mako}/bin/makoctl mode -t do-not-disturb && if ${pkgs.mako}/bin/makoctl mode | grep -q do-not-disturb; then ${pkgs.libnotify}/bin/notify-send -a dnd-toggle -t 2000 \"Notifications off\"; else ${pkgs.libnotify}/bin/notify-send -a dnd-toggle -t 2000 \"Notifications on\"; fi'";
-        };
+        startup =
+          [
+            {command = "nm-applet";}
+            {command = "${pkgs.wl-clipboard}/bin/wl-paste --type text --watch ${pkgs.cliphist}/bin/cliphist store";}
+            {command = "${pkgs.wl-clipboard}/bin/wl-paste --type image --watch ${pkgs.cliphist}/bin/cliphist store";}
+          ]
+          ++ map (command: {inherit command;}) cfg.startup;
+        keybindings =
+          lib.filterAttrs (_: v: v != null)
+          (lib.mapAttrs' (key: b: lib.nameValuePair (swayKey key) (swayCommand key b)) enabledBinds);
         modes = lib.mkOptionDefault {
           mouse = {
             "f" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer click left, mode \"default\"";
@@ -306,7 +357,7 @@
             "d" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer scroll 15 0";
             "u" = "exec ${pkgs.wlrctl}/bin/wlrctl pointer scroll -15 0";
 
-            "apostrophe" = "mode \"default\", exec '${wl-kbptr-patched}/bin/wl-kbptr -o modes=floating -o mode_floating.source=detect; swaymsg mode mouse'";
+            "apostrophe" = "mode \"default\", ${swayAction "pointer-hint" null}";
 
             "Escape" = "mode \"default\"";
             "Return" = "mode \"default\"";
@@ -321,31 +372,27 @@
             // barConfig)
         ];
         input = {
-          "type:touchpad" = {
-            dwt = "enabled";
-            tap = "enabled";
-            natural_scroll = "enabled";
-            middle_emulation = "enabled";
-            accel_profile = "flat";
+          "type:touchpad" = with cfg.input.touchpad; {
+            dwt = onOff dwt;
+            tap = onOff tap;
+            natural_scroll = onOff naturalScroll;
+            middle_emulation = onOff middleEmulation;
+            accel_profile = accelProfile;
           };
-          "type:keyboard" = {
-            xkb_layout = "eu,bg(phonetic)";
-            xkb_options = "grp:alt_shift_toggle";
-            repeat_delay = "250";
-            repeat_rate = "50";
-          };
-        };
-        output = {
-          "eDP-1" = {
-            position = "0 0";
-            mode = "1920x1080@144Hz";
-          };
-
-          "HDMI-A-1" = {
-            position = "1920 0";
-            mode = "1920x1080@74.973Hz";
+          "type:keyboard" = with cfg.input.keyboard; {
+            xkb_layout = layout;
+            xkb_options = options;
+            repeat_delay = toString repeatDelay;
+            repeat_rate = toString repeatRate;
           };
         };
+        output =
+          lib.mapAttrs (_: o: {
+            position = "${toString o.x} ${toString o.y}";
+            mode = "${o.mode}@${o.refresh}Hz";
+            scale = toString o.scale;
+          })
+          cfg.outputs;
       };
     };
   };
