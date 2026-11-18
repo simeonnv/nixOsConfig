@@ -54,18 +54,25 @@
 
       fonts = {
         serif = {
-          package = pkgs.dejavu_fonts;
-          name = "DejaVu Serif";
+          package = pkgs.ultimate-oldschool-pc-font-pack;
+          name = "MxPlus IBM VGA 8x16";
         };
 
         sansSerif = {
-          package = pkgs.dejavu_fonts;
-          name = "DejaVu Sans";
+          package = pkgs.ultimate-oldschool-pc-font-pack;
+          name = "MxPlus IBM VGA 8x16";
         };
 
         monospace = {
-          package = pkgs.dejavu_fonts;
-          name = "DejaVu Sans Mono";
+          package = pkgs.ultimate-oldschool-pc-font-pack;
+          name = "MxPlus IBM VGA 8x16";
+        };
+
+        sizes = {
+          applications = 12;
+          desktop = 12;
+          popups = 12;
+          terminal = 12;
         };
 
         emoji = {

@@ -14,7 +14,15 @@
     nixpkgs.config.permittedInsecurePackages = ["openssl-1.1.1w"];
 
     home.packages = [
-      inputs.concord.packages.${pkgs.stdenv.hostPlatform.system}.default
+      (pkgs.symlinkJoin {
+        name = "concord";
+        paths = [inputs.concord.packages.${pkgs.stdenv.hostPlatform.system}.default];
+        nativeBuildInputs = [pkgs.makeWrapper];
+        postBuild = ''
+          wrapProgram $out/bin/concord \
+            --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath [pkgs.libglvnd]}
+        '';
+      })
       pkgs.mpv
     ];
 

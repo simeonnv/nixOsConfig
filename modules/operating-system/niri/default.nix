@@ -1,6 +1,5 @@
 # Copyright 2026 Simeon Vangelov
 # SPDX-License-Identifier: MIT
-
 {self, ...}: let
   niriVersion = "26.04";
   noctaliaVersion = "5.5.0";
@@ -88,7 +87,9 @@ in {
         media-next = msg "media next";
         media-previous = msg "media previous";
       }
-      .${name};
+      .${
+        name
+      };
 
     niriBody = b:
       if b.niri != null
@@ -104,18 +105,18 @@ in {
     binds =
       lib.filterAttrs (_: v: v != null)
       (lib.mapAttrs (_: b: let
-          body = niriBody b;
-        in
-          if body == null
-          then null
-          else
-            body
-            // {
-              _props =
-                {hotkey-overlay-title = b.description;}
-                // lib.optionalAttrs b.allowWhenLocked {allow-when-locked = true;};
-            })
-        enabledBinds);
+        body = niriBody b;
+      in
+        if body == null
+        then null
+        else
+          body
+          // {
+            _props =
+              {hotkey-overlay-title = b.description;}
+              // lib.optionalAttrs b.allowWhenLocked {allow-when-locked = true;};
+          })
+      enabledBinds);
 
     terminalSplit = pkgs.writeShellScript "niri-terminal" ''
       case "$(niri msg --json focused-window | ${pkgs.jq}/bin/jq -r '.app_id // empty')" in
@@ -188,6 +189,8 @@ in {
           xcursor-size = config.stylix.cursor.size;
         };
 
+        gestures.hot-corners.off = {};
+
         prefer-no-csd = {};
         hotkey-overlay.skip-at-startup = {};
         screenshot-path = "~/Pictures/Screenshots/screenshot-%Y%m%d-%H%M%S.png";
@@ -239,6 +242,11 @@ in {
           launch_apps_as_systemd_services = true;
           polkit_agent = true;
         };
+        audio = {
+          enable_sounds = true;
+          enable_notification_sounds = true;
+          sound_theme = "papue";
+        };
         wallpaper.default.path = "${config.stylix.image}";
         widget.wallpaper.enabled = false;
         widget.workspaces = {
@@ -253,6 +261,7 @@ in {
           radius_bottom_left = 0;
           radius_bottom_right = 0;
           concave_edge_corners = false;
+          font_scale = 1.143;
           capsule_radius = 0;
           shadow = false;
           margin_ends = cfg.gaps.inner + cfg.gaps.outer;
@@ -286,6 +295,19 @@ in {
           };
         };
       };
+    };
+
+    xdg.dataFile = {
+      "sounds/papue/index.theme".text = ''
+        [Sound Theme]
+        Name=papue
+        Inherits=freedesktop
+        Directories=stereo
+
+        [stereo]
+        OutputProfile=stereo
+      '';
+      "sounds/papue/stereo/message-new-instant.oga".source = cfg.notificationSound;
     };
 
     systemd.user.services.noctalia = {

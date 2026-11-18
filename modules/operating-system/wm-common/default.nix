@@ -261,6 +261,13 @@
             (lib.filterAttrs (_: b: b.enable) config.wm.keybinds)));
       };
 
+      notificationSound = mkOption {
+        type = types.package;
+        default = pkgs.runCommand "papue.oga" {nativeBuildInputs = [pkgs.ffmpeg];} ''
+          ffmpeg -i ${../../../assets/papue.mp3} -c:a libvorbis -f ogg $out
+        '';
+      };
+
       wlKbptr = mkOption {
         type = types.package;
         default =
