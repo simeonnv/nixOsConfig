@@ -240,7 +240,11 @@ in {
           polkit_agent = true;
         };
         wallpaper.default.path = "${config.stylix.image}";
-        widget.workspaces.hide_when_empty = true;
+        widget.wallpaper.enabled = false;
+        widget.workspaces = {
+          hide_when_empty = true;
+          active_pill_size = 1.0;
+        };
         bar.default = {
           compositor_blur = false;
           radius = 0;
@@ -249,6 +253,7 @@ in {
           radius_bottom_left = 0;
           radius_bottom_right = 0;
           concave_edge_corners = false;
+          capsule_radius = 0;
           shadow = false;
           margin_ends = cfg.gaps.inner + cfg.gaps.outer;
           margin_edge = cfg.gaps.outer;
