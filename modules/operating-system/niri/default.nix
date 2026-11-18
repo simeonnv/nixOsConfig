@@ -288,7 +288,10 @@ in {
         After = lib.mkForce ["niri.service"];
         Before = ["graphical-session.target"];
       };
-      Service.Type = "notify";
+      Service = {
+        Type = "notify";
+        ExecStartPre = "${pkgs.coreutils}/bin/rm -rf %S/noctalia/clipboard";
+      };
       Install.WantedBy = lib.mkForce ["niri.service"];
     };
   };
