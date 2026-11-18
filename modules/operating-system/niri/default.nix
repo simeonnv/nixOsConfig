@@ -264,12 +264,8 @@ in {
             shortcut = "1";
           }
           {
-            action = "logout";
-            shortcut = "2";
-          }
-          {
             action = "lock_and_suspend";
-            shortcut = "3";
+            shortcut = "2";
           }
         ];
         location.address = lib.mkDefault "Sofia, Bulgaria";
