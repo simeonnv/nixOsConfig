@@ -15,6 +15,8 @@
         pkgs-multiverse
         desktop
         sway
+        niri
+        power-auth
         greeter
         git
         fastfetch
@@ -96,6 +98,7 @@
       services.udiskie.enable = true;
       imports = with self.homeModules; [
         sway
+        niri
         discord
         helix
         firefox

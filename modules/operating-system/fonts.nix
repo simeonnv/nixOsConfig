@@ -17,6 +17,7 @@
       dina-font
       proggyfonts
       _3270font
+      ultimate-oldschool-pc-font-pack
     ];
   };
 }

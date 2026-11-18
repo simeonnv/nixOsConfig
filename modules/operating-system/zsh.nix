@@ -48,7 +48,13 @@
       # };
     };
 
-    programs.starship.enable = true;
+    programs.starship = {
+      enable = true;
+      settings.character = {
+        success_symbol = "[>](bold green)";
+        error_symbol = "[>](bold red)";
+      };
+    };
 
     programs.zoxide.enable = true;
     programs.zoxide.enableZshIntegration = true;

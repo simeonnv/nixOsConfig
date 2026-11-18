@@ -59,8 +59,8 @@ in {
       stylixBar
       // {
         fonts = {
-          names = ["IBM 3270"];
-          size = 11.0;
+          names = [config.stylix.fonts.monospace.name];
+          size = 12.0;
         };
         colors =
           stylixBar.colors
@@ -212,10 +212,14 @@ in {
 
     services.mako = {
       enable = true;
-      settings.default-timeout = 5000;
+      settings = {
+        default-timeout = 5000;
+        on-notify = "exec ${pkgs.pipewire}/bin/pw-play ${cfg.notificationSound}";
+      };
       extraConfig = ''
         [mode=do-not-disturb]
         invisible=1
+        on-notify=none
 
         [mode=do-not-disturb app-name=dnd-toggle]
         invisible=0
