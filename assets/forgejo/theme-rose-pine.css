@@ -1,0 +1,465 @@
+@import "./theme-forgejo-dark.css";
+
+@font-face {
+  font-family: "MxPlus IBM VGA 8x16";
+  src: local("MxPlus IBM VGA 8x16"), local("MxPlus_IBM_VGA_8x16"), url("../fonts/MxPlus_IBM_VGA_8x16.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --rp-base: #191724;
+  --rp-surface: #1f1d2e;
+  --rp-overlay: #26233a;
+  --rp-muted: #6e6a86;
+  --rp-subtle: #908caa;
+  --rp-text: #e0def4;
+  --rp-love: #eb6f92;
+  --rp-gold: #f6c177;
+  --rp-rose: #ebbcba;
+  --rp-pine: #31748f;
+  --rp-foam: #9ccfd8;
+  --rp-iris: #c4a7e7;
+  --rp-hl-low: #21202e;
+  --rp-hl-med: #403d52;
+  --rp-hl-high: #524f67;
+
+  --fonts-proportional: "MxPlus IBM VGA 8x16", monospace;
+  --fonts-monospace: "MxPlus IBM VGA 8x16", monospace, var(--fonts-emoji);
+  --fonts-override: "MxPlus IBM VGA 8x16";
+
+  --border-radius: 0;
+  --border-radius-medium: 0;
+  --border-radius-large: 0;
+  --border-radius-full: 0;
+
+  --color-primary: var(--rp-iris);
+  --color-primary-contrast: var(--rp-base);
+  --color-primary-dark-1: color-mix(in srgb, var(--rp-iris) 85%, white);
+  --color-primary-dark-2: color-mix(in srgb, var(--rp-iris) 75%, white);
+  --color-primary-dark-3: color-mix(in srgb, var(--rp-iris) 65%, white);
+  --color-primary-dark-4: color-mix(in srgb, var(--rp-iris) 55%, white);
+  --color-primary-light-1: color-mix(in srgb, var(--rp-iris) 88%, var(--rp-base));
+  --color-primary-light-2: color-mix(in srgb, var(--rp-iris) 76%, var(--rp-base));
+  --color-primary-light-3: color-mix(in srgb, var(--rp-iris) 64%, var(--rp-base));
+  --color-primary-light-4: color-mix(in srgb, var(--rp-iris) 52%, var(--rp-base));
+  --color-primary-light-5: color-mix(in srgb, var(--rp-iris) 40%, var(--rp-base));
+  --color-primary-light-6: color-mix(in srgb, var(--rp-iris) 28%, var(--rp-base));
+  --color-primary-light-7: color-mix(in srgb, var(--rp-iris) 16%, var(--rp-base));
+  --color-primary-alpha-10: #c4a7e719;
+  --color-primary-alpha-20: #c4a7e733;
+  --color-primary-alpha-30: #c4a7e74b;
+  --color-primary-alpha-40: #c4a7e766;
+  --color-primary-alpha-50: #c4a7e780;
+  --color-primary-alpha-60: #c4a7e799;
+  --color-primary-alpha-70: #c4a7e7b3;
+  --color-primary-alpha-80: #c4a7e7cc;
+  --color-primary-alpha-90: #c4a7e7e1;
+
+  --color-secondary: var(--rp-hl-med);
+  --color-secondary-dark-1: var(--rp-hl-high);
+  --color-secondary-dark-2: color-mix(in srgb, var(--rp-hl-high) 75%, var(--rp-muted));
+  --color-secondary-dark-3: color-mix(in srgb, var(--rp-hl-high) 50%, var(--rp-muted));
+  --color-secondary-dark-4: var(--rp-muted);
+  --color-secondary-dark-5: color-mix(in srgb, var(--rp-muted) 50%, var(--rp-subtle));
+  --color-secondary-dark-6: var(--rp-subtle);
+  --color-secondary-dark-7: color-mix(in srgb, var(--rp-subtle) 75%, var(--rp-text));
+  --color-secondary-dark-8: color-mix(in srgb, var(--rp-subtle) 50%, var(--rp-text));
+  --color-secondary-dark-9: color-mix(in srgb, var(--rp-subtle) 25%, var(--rp-text));
+  --color-secondary-dark-10: var(--rp-text);
+  --color-secondary-dark-11: var(--rp-text);
+  --color-secondary-dark-12: var(--rp-text);
+  --color-secondary-dark-13: var(--rp-text);
+  --color-secondary-light-1: color-mix(in srgb, var(--rp-hl-med) 50%, var(--rp-overlay));
+  --color-secondary-light-2: var(--rp-overlay);
+  --color-secondary-light-3: var(--rp-surface);
+  --color-secondary-light-4: var(--rp-base);
+  --color-secondary-alpha-10: #403d5219;
+  --color-secondary-alpha-20: #403d5233;
+  --color-secondary-alpha-30: #403d524b;
+  --color-secondary-alpha-40: #403d5266;
+  --color-secondary-alpha-50: #403d5280;
+  --color-secondary-alpha-60: #403d5299;
+  --color-secondary-alpha-70: #403d52b3;
+  --color-secondary-alpha-80: #403d52cc;
+  --color-secondary-alpha-90: #403d52e1;
+
+  --color-console-fg: var(--rp-text);
+  --color-console-fg-subtle: var(--rp-subtle);
+  --color-console-bg: var(--rp-base);
+  --color-console-border: var(--rp-hl-med);
+  --color-console-hover-bg: #e0def416;
+  --color-console-active-bg: var(--rp-hl-med);
+  --color-console-menu-bg: var(--rp-overlay);
+  --color-console-menu-border: var(--rp-hl-high);
+
+  --color-red: var(--rp-love);
+  --color-orange: var(--rp-rose);
+  --color-yellow: var(--rp-gold);
+  --color-olive: var(--rp-foam);
+  --color-green: var(--rp-foam);
+  --color-teal: var(--rp-pine);
+  --color-blue: var(--rp-pine);
+  --color-violet: var(--rp-iris);
+  --color-purple: var(--rp-iris);
+  --color-pink: var(--rp-love);
+  --color-brown: var(--rp-rose);
+  --color-grey: var(--rp-muted);
+  --color-black: var(--rp-base);
+  --color-red-light: var(--rp-love);
+  --color-orange-light: var(--rp-rose);
+  --color-yellow-light: var(--rp-gold);
+  --color-olive-light: var(--rp-foam);
+  --color-green-light: var(--rp-foam);
+  --color-teal-light: var(--rp-foam);
+  --color-purple-light: var(--rp-iris);
+  --color-pink-light: var(--rp-love);
+  --color-brown-light: var(--rp-rose);
+  --color-grey-light: var(--rp-subtle);
+  --color-black-light: var(--rp-surface);
+  --color-red-dark-1: color-mix(in srgb, var(--rp-love) 85%, black);
+  --color-orange-dark-1: color-mix(in srgb, var(--rp-rose) 85%, black);
+  --color-yellow-dark-1: color-mix(in srgb, var(--rp-gold) 85%, black);
+  --color-olive-dark-1: color-mix(in srgb, var(--rp-foam) 85%, black);
+  --color-green-dark-1: color-mix(in srgb, var(--rp-foam) 85%, black);
+  --color-teal-dark-1: color-mix(in srgb, var(--rp-pine) 85%, black);
+  --color-violet-dark-1: color-mix(in srgb, var(--rp-iris) 85%, black);
+  --color-purple-dark-1: color-mix(in srgb, var(--rp-iris) 85%, black);
+  --color-pink-dark-1: color-mix(in srgb, var(--rp-love) 85%, black);
+  --color-brown-dark-1: color-mix(in srgb, var(--rp-rose) 85%, black);
+  --color-black-dark-1: var(--rp-base);
+  --color-red-dark-2: color-mix(in srgb, var(--rp-love) 70%, black);
+  --color-orange-dark-2: color-mix(in srgb, var(--rp-rose) 70%, black);
+  --color-yellow-dark-2: color-mix(in srgb, var(--rp-gold) 70%, black);
+  --color-olive-dark-2: color-mix(in srgb, var(--rp-foam) 70%, black);
+  --color-green-dark-2: color-mix(in srgb, var(--rp-foam) 70%, black);
+  --color-teal-dark-2: color-mix(in srgb, var(--rp-pine) 70%, black);
+  --color-violet-dark-2: color-mix(in srgb, var(--rp-iris) 70%, black);
+  --color-purple-dark-2: color-mix(in srgb, var(--rp-iris) 70%, black);
+  --color-pink-dark-2: color-mix(in srgb, var(--rp-love) 70%, black);
+  --color-brown-dark-2: color-mix(in srgb, var(--rp-rose) 70%, black);
+  --color-black-dark-2: var(--rp-base);
+
+  --color-ansi-black: var(--rp-overlay);
+  --color-ansi-red: var(--rp-love);
+  --color-ansi-green: var(--rp-pine);
+  --color-ansi-yellow: var(--rp-gold);
+  --color-ansi-blue: var(--rp-foam);
+  --color-ansi-magenta: var(--rp-iris);
+  --color-ansi-cyan: var(--rp-rose);
+  --color-ansi-bright-black: var(--rp-muted);
+  --color-ansi-bright-red: var(--rp-love);
+  --color-ansi-bright-green: var(--rp-pine);
+  --color-ansi-bright-yellow: var(--rp-gold);
+  --color-ansi-bright-blue: var(--rp-foam);
+  --color-ansi-bright-magenta: var(--rp-iris);
+  --color-ansi-bright-cyan: var(--rp-rose);
+
+  --color-gold: var(--rp-gold);
+  --color-diff-removed-word-bg: color-mix(in srgb, var(--rp-love) 40%, var(--rp-base));
+  --color-diff-added-word-bg: color-mix(in srgb, var(--rp-foam) 35%, var(--rp-base));
+  --color-diff-removed-row-bg: color-mix(in srgb, var(--rp-love) 15%, var(--rp-base));
+  --color-diff-moved-row-bg: color-mix(in srgb, var(--rp-gold) 20%, var(--rp-base));
+  --color-diff-added-row-bg: color-mix(in srgb, var(--rp-foam) 12%, var(--rp-base));
+  --color-diff-removed-row-border: color-mix(in srgb, var(--rp-love) 40%, var(--rp-base));
+  --color-diff-moved-row-border: color-mix(in srgb, var(--rp-gold) 40%, var(--rp-base));
+  --color-diff-added-row-border: color-mix(in srgb, var(--rp-foam) 35%, var(--rp-base));
+  --color-diff-inactive: var(--rp-overlay);
+
+  --color-error-border: var(--rp-love);
+  --color-error-bg: color-mix(in srgb, var(--rp-love) 20%, var(--rp-base));
+  --color-error-bg-active: color-mix(in srgb, var(--rp-love) 30%, var(--rp-base));
+  --color-error-bg-hover: color-mix(in srgb, var(--rp-love) 30%, var(--rp-base));
+  --color-error-text: var(--rp-love);
+  --color-success-border: var(--rp-foam);
+  --color-success-bg: color-mix(in srgb, var(--rp-foam) 15%, var(--rp-base));
+  --color-success-text: var(--rp-foam);
+  --color-warning-border: var(--rp-gold);
+  --color-warning-bg: color-mix(in srgb, var(--rp-gold) 15%, var(--rp-base));
+  --color-warning-text: var(--rp-gold);
+  --color-info-border: var(--rp-pine);
+  --color-info-bg: color-mix(in srgb, var(--rp-pine) 25%, var(--rp-base));
+  --color-info-text: var(--rp-text);
+  --color-red-badge: var(--rp-love);
+  --color-red-badge-bg: #eb6f9222;
+  --color-red-badge-hover-bg: #eb6f9244;
+  --color-green-badge: var(--rp-foam);
+  --color-green-badge-bg: #9ccfd822;
+  --color-green-badge-hover-bg: #9ccfd844;
+  --color-yellow-badge: var(--rp-gold);
+  --color-yellow-badge-bg: #f6c17722;
+  --color-yellow-badge-hover-bg: #f6c17744;
+  --color-orange-badge: var(--rp-rose);
+  --color-orange-badge-bg: #ebbcba22;
+  --color-orange-badge-hover-bg: #ebbcba44;
+  --color-danger-bg: color-mix(in srgb, var(--rp-love) 20%, var(--rp-base));
+  --color-thin-red-highlight: var(--rp-love);
+
+  --color-body: var(--rp-base);
+  --color-box-header: var(--rp-overlay);
+  --color-box-body: var(--rp-surface);
+  --color-box-body-highlight: var(--rp-hl-med);
+  --color-text-dark: var(--rp-text);
+  --color-text: var(--rp-text);
+  --color-text-light: var(--rp-subtle);
+  --color-text-light-1: var(--rp-subtle);
+  --color-text-light-2: var(--rp-subtle);
+  --color-text-light-3: var(--rp-muted);
+  --color-footer: var(--rp-surface);
+  --color-timeline: var(--rp-hl-med);
+  --color-input-text: var(--rp-text);
+  --color-input-background: var(--rp-overlay);
+  --color-input-toggle-background: var(--rp-overlay);
+  --color-input-border: var(--rp-hl-med);
+  --color-input-border-hover: var(--rp-hl-high);
+  --color-header-wrapper: var(--rp-surface);
+  --color-header-wrapper-transparent: #1f1d2e00;
+  --color-light: #00000028;
+  --color-light-border: #e0def428;
+  --color-hover: var(--rp-hl-med);
+  --color-active: var(--rp-hl-med);
+  --color-menu: var(--rp-surface);
+  --color-card: var(--rp-surface);
+  --fancy-card-bg: var(--rp-overlay);
+  --fancy-card-border: var(--rp-hl-med);
+  --color-markup-table-row: #e0def406;
+  --color-markup-code-block: var(--rp-base);
+  --color-markup-code-inline: var(--rp-overlay);
+  --color-button: var(--rp-overlay);
+  --color-code-bg: var(--rp-surface);
+  --color-shadow: #00000060;
+  --color-secondary-bg: var(--rp-overlay);
+  --color-text-focus: var(--rp-text);
+  --color-expand-button: var(--rp-hl-med);
+  --color-editor-line-highlight: var(--rp-overlay);
+  --color-reaction-bg: #e0def412;
+  --color-tooltip-text: var(--rp-text);
+  --color-tooltip-bg: var(--rp-overlay);
+  --color-nav-bg: var(--rp-surface);
+  --color-nav-hover-bg: var(--rp-hl-med);
+  --color-label-text: var(--rp-text);
+  --color-label-bg: var(--rp-hl-med);
+  --color-label-hover-bg: var(--rp-hl-high);
+  --color-label-active-bg: var(--rp-hl-high);
+  --color-label-bg-alt: var(--rp-hl-high);
+  --color-accent: var(--rp-iris);
+  --color-small-accent: var(--color-primary-light-5);
+  --color-highlight-fg: var(--rp-gold);
+  --color-highlight-bg: #f6c17733;
+  --color-overlay-backdrop: #191724c0;
+  --color-selection-bg: var(--rp-hl-high);
+  --color-selection-fg: var(--rp-text);
+  --color-indicator-idle: var(--rp-foam);
+  --color-indicator-idle-20: #9ccfd81a;
+  --color-indicator-active: var(--rp-pine);
+  --color-indicator-active-20: #31748f33;
+}
+
+html, body {
+  font-size: 16px;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.lines-num,
+.lines-code,
+.code-inner,
+.lines-escape,
+.file-header,
+.markup pre,
+.markup code {
+  font-size: 16px !important;
+}
+
+i.grey.icon.icon.icon.icon {
+  color: var(--rp-muted) !important;
+}
+
+#navbar {
+  border-bottom: 2px solid var(--rp-iris) !important;
+}
+
+#navbar-logo img {
+  width: auto !important;
+  height: 20px !important;
+}
+
+#navbar #navbar-logo:hover,
+#navbar #navbar-logo:focus {
+  background: transparent !important;
+  outline: none !important;
+  border-color: transparent !important;
+}
+
+.ui.button,
+.button,
+button,
+input[type="submit"],
+.ui.menu .item,
+#navbar .item {
+  border-radius: 0 !important;
+}
+
+.ui.button:hover,
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+.ui.menu a.item:hover,
+.ui.menu .dropdown.item:hover,
+.switch > .item:hover,
+#navbar .item:hover {
+  border-color: var(--rp-iris) !important;
+  outline: 1px solid var(--rp-iris) !important;
+  outline-offset: -1px;
+}
+
+:root {
+  --color-nav-hover-bg: transparent;
+}
+
+.button {
+  --button-background-hover: var(--button-background) !important;
+  --button-color-hover: var(--button-color) !important;
+}
+
+.ui.button:not(.active):is(:hover, :focus),
+.ui.basic.button:not(.active):is(:hover, :focus),
+.ui.basic.buttons .button:not(.active):is(:hover, :focus) {
+  background: var(--color-button) !important;
+}
+
+.ui.primary.button:is(:hover, :focus),
+.ui.primary.buttons .button:is(:hover, :focus) {
+  background: var(--color-primary) !important;
+}
+
+.ui.red.button:is(:hover, :focus),
+.ui.red.buttons .button:is(:hover, :focus) {
+  background: var(--color-red) !important;
+}
+
+.ui.green.button:is(:hover, :focus),
+.ui.green.buttons .button:is(:hover, :focus) {
+  background: var(--color-green) !important;
+}
+
+.ui.menu a.item:not(.active):hover,
+.ui.menu .dropdown.item:not(.active):hover,
+.switch > .item:not(.active):hover,
+#navbar .item:not(.active):hover {
+  background: transparent !important;
+}
+
+.switch {
+  border-color: var(--rp-hl-high) !important;
+  background: var(--rp-surface) !important;
+}
+
+.switch > .item {
+  margin: 0 !important;
+  padding-inline: var(--switch-padding-inline) !important;
+}
+
+.switch > .item.active {
+  background: var(--rp-overlay) !important;
+  color: var(--rp-iris) !important;
+  outline: 1px solid var(--rp-iris) !important;
+  outline-offset: -1px;
+}
+
+.chroma .bp, .chroma .fm, .chroma .n, .chroma .na, .chroma .nb, .chroma .nf,
+.chroma .ni, .chroma .nl, .chroma .nn, .chroma .nt, .chroma .nv, .chroma .py,
+.chroma .vc, .chroma .vg, .chroma .vi, .chroma .vm { color: var(--rp-rose); }
+.chroma .k, .chroma .kc, .chroma .kd, .chroma .kp, .chroma .kr, .chroma .kt,
+.chroma .ne, .chroma .se { color: var(--rp-pine); }
+.chroma .kn, .chroma .gu { color: var(--rp-iris); }
+.chroma .nc { color: var(--rp-foam); }
+.chroma .no, .chroma .l, .chroma .ld, .chroma .m, .chroma .mb, .chroma .mf,
+.chroma .mh, .chroma .mi, .chroma .mo, .chroma .il, .chroma .s, .chroma .s1,
+.chroma .s2, .chroma .sa, .chroma .sb, .chroma .sc, .chroma .sd, .chroma .dl,
+.chroma .sh, .chroma .si, .chroma .sr, .chroma .ss, .chroma .sx { color: var(--rp-gold); }
+.chroma .nd, .chroma .o, .chroma .ow, .chroma .p { color: var(--rp-subtle); }
+.chroma .c, .chroma .c1, .chroma .ch, .chroma .cm, .chroma .cp, .chroma .cpf,
+.chroma .cs, .chroma .go, .chroma .w { color: var(--rp-muted); }
+.chroma .nx, .chroma .gh, .chroma .gp, .chroma .gt { color: var(--rp-text); }
+.chroma .gr, .chroma .err { color: var(--rp-love); }
+.chroma .gd { color: var(--rp-love); background-color: transparent; }
+.chroma .gi { color: var(--rp-foam); background-color: transparent; }
+.chroma .ge { color: inherit; font-style: italic; }
+.chroma .gs { color: inherit; font-weight: bold; }
+
+.rp-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 64px 16px !important;
+}
+
+.rp-home .rp-logo {
+  width: 320px;
+  max-width: 80vw;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.rp-home .rp-term {
+  width: 100%;
+  max-width: 640px;
+  background: var(--rp-surface);
+  border: 4px double var(--rp-iris);
+}
+
+.rp-home .rp-term-bar {
+  background: var(--rp-iris);
+  color: var(--rp-base);
+  text-align: center;
+  padding: 0 8px;
+}
+
+.rp-home .rp-term-body {
+  padding: 16px;
+  line-height: 1.5;
+}
+
+.rp-home .rp-term-body p {
+  margin: 0;
+}
+
+.rp-home .rp-prompt {
+  color: var(--rp-iris);
+}
+
+.rp-home .rp-out {
+  color: var(--rp-subtle);
+}
+
+.rp-home .rp-term a {
+  color: var(--rp-rose);
+}
+
+.rp-home .rp-term a:hover {
+  color: var(--rp-base);
+  background: var(--rp-rose);
+  text-decoration: none;
+}
+
+.rp-home .rp-cursor {
+  animation: rp-blink 1s steps(1) infinite;
+}
+
+@keyframes rp-blink {
+  50% { opacity: 0; }
+}
+
+.ui.red.label.notification_count,
+.ui.primary.label,
+.ui.primary.labels .label {
+  background-color: var(--rp-iris) !important;
+  color: var(--rp-base) !important;
+}
