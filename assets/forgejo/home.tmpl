@@ -2,15 +2,15 @@
 <div role="main" aria-label="{{ctx.Locale.Tr "home"}}" class="page-content home rp-home">
 	<img class="rp-logo" src="{{AssetUrlPrefix}}/img/logo.svg" alt="]T[">
 	<div class="rp-term">
-		<div class="rp-term-bar">{{AppDomain}}</div>
+		<div class="rp-term-bar">guest@{{AppDomain}}: ~</div>
 		<div class="rp-term-body">
-			<p><span class="rp-prompt">C:\&gt;</span> ver</p>
-			<p class="rp-out">Forgejo {{AppVerNoMetadata}}</p>
+			<p><span class="rp-prompt">guest@{{AppDomain}}</span>:<span class="rp-path">~</span>$ forgejo --version</p>
+			<p class="rp-out">Forgejo version {{AppVerNoMetadata}}</p>
 			<p>&nbsp;</p>
-			<p><span class="rp-prompt">C:\&gt;</span> dir /w</p>
-			<p class="rp-out">[<a href="{{AppSubUrl}}/explore/repos">REPOS</a>]&nbsp;&nbsp;[<a href="{{AppSubUrl}}/explore/users">USERS</a>]&nbsp;&nbsp;[<a href="{{AppSubUrl}}/explore/organizations">ORGS</a>]</p>
+			<p><span class="rp-prompt">guest@{{AppDomain}}</span>:<span class="rp-path">~</span>$ ls</p>
+			<p class="rp-out"><a class="rp-dir" href="{{AppSubUrl}}/explore/repos">repos/</a>&nbsp;&nbsp;<a class="rp-dir" href="{{AppSubUrl}}/explore/users">users/</a>&nbsp;&nbsp;<a class="rp-dir" href="{{AppSubUrl}}/explore/organizations">orgs/</a>&nbsp;&nbsp;<a class="rp-exec" href="{{AppSubUrl}}/user/login">login*</a></p>
 			<p>&nbsp;</p>
-			<p><span class="rp-prompt">C:\&gt;</span> <a href="{{AppSubUrl}}/user/login">login</a><span class="rp-cursor">█</span></p>
+			<p><span class="rp-prompt">guest@{{AppDomain}}</span>:<span class="rp-path">~</span>$ <span class="rp-cursor">█</span></p>
 		</div>
 	</div>
 </div>

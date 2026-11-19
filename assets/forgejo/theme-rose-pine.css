@@ -439,13 +439,25 @@ input[type="submit"]:hover,
   color: var(--rp-subtle);
 }
 
+.rp-home .rp-path {
+  color: var(--rp-foam);
+}
+
 .rp-home .rp-term a {
   color: var(--rp-rose);
 }
 
+.rp-home .rp-term a.rp-dir {
+  color: var(--rp-foam);
+}
+
+.rp-home .rp-term a.rp-exec {
+  color: var(--rp-gold);
+}
+
 .rp-home .rp-term a:hover {
   color: var(--rp-base);
-  background: var(--rp-rose);
+  background: var(--rp-iris);
   text-decoration: none;
 }
 
