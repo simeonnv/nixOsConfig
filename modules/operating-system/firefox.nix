@@ -1,6 +1,5 @@
 # Copyright 2026 Simeon Vangelov
 # SPDX-License-Identifier: MIT
-
 {
   ownerProfile,
   inputs,
@@ -51,7 +50,38 @@
           "browser.toolbars.bookmarks.visibility" = "always";
           "extensions.autoDisableScopes" = 0;
           "xpinstall.signatures.required" = false;
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         };
+
+        userChrome = ''
+          :root {
+            --border-radius-small: 0 !important;
+            --border-radius-medium: 0 !important;
+            --border-radius-large: 0 !important;
+            --tab-border-radius: 0 !important;
+            --toolbarbutton-border-radius: 0 !important;
+            --arrowpanel-border-radius: 0 !important;
+            --urlbar-icon-border-radius: 0 !important;
+          }
+          * { border-radius: 0 !important; }
+        '';
+
+        userContent = ''
+          @-moz-document url-prefix("about:") {
+            * { border-radius: 0 !important; }
+          }
+
+          @-moz-document url("about:newtab"), url("about:home") {
+            .logo-and-wordmark .logo,
+            .logo-and-wordmark .wordmark { display: none !important; }
+            .logo-and-wordmark::after {
+              content: "]T[";
+              font-family: "MxPlus IBM VGA 8x16";
+              font-size: 96px;
+              color: #c4a7e7;
+            }
+          }
+        '';
       };
     };
 
