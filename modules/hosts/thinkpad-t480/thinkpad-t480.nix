@@ -56,7 +56,6 @@
         memory
         obs-studio
         mullvad
-        usbguard
         kicad
         atopile
         metrolist
@@ -143,8 +142,6 @@
     nixpkgs.config.allowUnfree = true;
 
     services.udisks2.enable = true;
-
-    services.usbguard.rules = builtins.readFile ./_usbguard-rules.conf;
 
     services.flatpak.enable = true;
     system.stateVersion = "25.11";

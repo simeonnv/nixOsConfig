@@ -34,6 +34,10 @@
         enable = true;
         gitCredentialHelper.enable = true;
       };
+      lazygit = {
+        enable = true;
+        settings.gui.border = "single";
+      };
     };
   };
 }
