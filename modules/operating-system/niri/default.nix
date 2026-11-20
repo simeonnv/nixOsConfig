@@ -241,6 +241,7 @@ in {
         shell = {
           launch_apps_as_systemd_services = true;
           polkit_agent = true;
+          corner_radius_scale = 0.0;
         };
         audio = {
           enable_sounds = true;
