@@ -269,6 +269,7 @@ in {
           shadow = false;
           margin_ends = -2;
           margin_edge = -2;
+          end = ["media" "cpu" "ram" "tray" "notifications" "clipboard" "network" "bluetooth" "volume" "brightness" "battery" "control-center" "session"];
         };
         shell.session.actions = [
           {

@@ -4,6 +4,8 @@
   domain = "git.fravs.org";
   httpPort = 3000;
   sshPort = 2223;
+  runnerId = "8ab5c243d0bf0090";
+  runnerUuid = "38616235-6332-3433-6430-626630303930";
 in {
   flake.nixosModules.forgejo = {
     config,
@@ -62,12 +64,53 @@ in {
         };
         service.DISABLE_REGISTRATION = true;
         session.COOKIE_SECURE = true;
-        actions.ENABLED = true;
+        actions = {
+          ENABLED = true;
+          DEFAULT_ACTIONS_URL = "github";
+        };
         ui = {
           THEMES = "rose-pine";
           DEFAULT_THEME = "rose-pine";
         };
       };
+    };
+
+    systemd.services.forgejo-runner-register = {
+      wantedBy = ["multi-user.target"];
+      after = ["forgejo.service"];
+      requires = ["forgejo.service"];
+      before = ["forgejo-runner-prodesk.service"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = cfg.user;
+        UMask = "0077";
+      };
+      script = ''
+        f=${cfg.stateDir}/runner-token
+        s=$(cat "$f" 2>/dev/null || true)
+        [ "''${#s}" -eq 40 ] || s="${runnerId}$(head -c 12 /dev/urandom | od -An -tx1 | tr -d ' \n')"
+        printf '%s' "$s" > "$f"
+        ${pkgs.lib.getExe cfg.package} --work-path ${cfg.stateDir} forgejo-cli actions register --name prodesk --secret-file "$f"
+      '';
+    };
+
+    systemd.services.forgejo-runner-prodesk = {
+      after = ["forgejo-runner-register.service"];
+      requires = ["forgejo-runner-register.service"];
+    };
+
+    services.forgejo-runner.instances.prodesk = {
+      enable = true;
+      settings = {
+        runner.labels = ["ubuntu-latest:host"];
+        server.connections.default = {
+          url = "http://127.0.0.1:${toString httpPort}";
+          uuid = runnerUuid;
+        };
+      };
+      secrets.server.connections.default.token_url = "${cfg.stateDir}/runner-token";
+      hostPackages = with pkgs; [bash coreutils curl gawk gnused gnugrep findutils gnutar gzip nodejs wget config.nix.package];
     };
 
     services.rathole.settings.client.services = {

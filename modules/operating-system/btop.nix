@@ -5,6 +5,7 @@
   flake.homeModules.btop = {...}: {
     programs.btop = {
       enable = true;
+      settings.rounded_corners = false;
     };
   };
 }
