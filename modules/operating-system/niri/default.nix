@@ -254,6 +254,9 @@ in {
           active_pill_size = 1.0;
         };
         bar.default = {
+          thickness = 36;
+          border = colors.base0D;
+          border_width = 2;
           compositor_blur = false;
           radius = 0;
           radius_top_left = 0;
@@ -264,8 +267,8 @@ in {
           font_scale = 1.143;
           capsule_radius = 0;
           shadow = false;
-          margin_ends = cfg.gaps.inner + cfg.gaps.outer;
-          margin_edge = cfg.gaps.outer;
+          margin_ends = -2;
+          margin_edge = -2;
         };
         shell.session.actions = [
           {

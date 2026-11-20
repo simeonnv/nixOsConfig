@@ -3,6 +3,7 @@
 {
   ownerProfile,
   inputs,
+  self,
   ...
 }: {
   flake.homeModules.firefox = {
@@ -15,7 +16,10 @@
     addons = inputs.firefox-addons.packages.${system};
     syphoria = inputs.syphoria.packages.${system}.extension;
     browser = config.programs.firefox.finalPackage;
+    logo = self.lib.fravsLogo pkgs;
   in {
+    home.file."${config.programs.firefox.configPath}/${config.programs.firefox.profiles.${ownerProfile.name}.path}/chrome/fravs.svg".source = "${logo}/favicon.svg";
+
     home.packages = lib.optional (browser.meta.mainProgram != "firefox") (
       pkgs.runCommand "firefox-alias" {} ''
         mkdir -p $out/bin
@@ -64,6 +68,10 @@
             --urlbar-icon-border-radius: 0 !important;
           }
           * { border-radius: 0 !important; }
+
+          .tab-icon-image[src="chrome://branding/content/icon32.png"] {
+            content: url("fravs.svg") !important;
+          }
         '';
 
         userContent = ''
